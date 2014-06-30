@@ -157,26 +157,25 @@ class Box(object):
         """
         return self.unpack(buf, save=False)
 
-    @property
-    def values(self):
+    def get_json(self):
         """
-        默认支持json格式
+        解析为json格式
+        用函数而不是属性的原因参考requests、flask.request
         :return:
         """
         if not self.body:
             return None
         return json.loads(self.body)
 
-    @values.setter
-    def values(self, data):
+    def set_json(self, value):
         """
-        默认支持json格式
+        打包为json格式
         :return:
         """
-        if not data:
+        if not value:
             self.body = ''
             return
-        self.body = json.dumps(data)
+        self.body = json.dumps(value)
 
     def __repr__(self):
         values = [(k, getattr(self, k)) for k in self._header_attrs]

@@ -4,7 +4,7 @@ from netkit.box import Box
 
 
 box1 = Box()
-box1.values = dict(uin=1, name=u'我')
+box1.set_json(dict(uin=1, name=u'我'))
 print box1
 print repr(box1.pack())
 print box1.body
@@ -17,5 +17,5 @@ for i in range(0, len(buf)+1):
 
     if box2.unpack(tmp_buf) > 0:
         print box2
-        print box2.values
+        print box2.get_json()
         break
