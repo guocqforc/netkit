@@ -194,7 +194,7 @@ class Stream(object):
     def close_fd(self):
         if self.sock:
             try:
-                self.sock.close
+                self.sock.close()
             finally:
                 self.sock = None
 
