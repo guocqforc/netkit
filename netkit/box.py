@@ -183,5 +183,3 @@ class Box(object):
         values.append(('body', self.body))
 
         return repr(values)
-
-    __str__ = __repr__
