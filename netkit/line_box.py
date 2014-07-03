@@ -5,7 +5,7 @@
 
 import json
 
-LINE_SUFFIX = '\n'
+END_STR = '\n'
 
 
 class LineBox(object):
@@ -35,10 +35,13 @@ class LineBox(object):
 
     @body.setter
     def body(self, value):
-        if value.endswith(LINE_SUFFIX):
+        if value.endswith(END_STR):
             self._body = value
         else:
-            self._body = value + LINE_SUFFIX
+            self._body = value + END_STR
+
+        if isinstance(self._body, unicode):
+            self._body = self._body.encode('utf-8')
 
     def reset(self):
         self._unpack_done = False
@@ -63,7 +66,7 @@ class LineBox(object):
             0: 继续收
         """
 
-        found_idx = buf.find(LINE_SUFFIX)
+        found_idx = buf.find(END_STR)
         if found_idx < 0:
             # 说明没有\n
             return 0

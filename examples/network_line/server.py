@@ -5,7 +5,7 @@
 
 from gevent import monkey;monkey.patch_all()
 
-from netkit.box import Box
+from netkit.line_box import LineBox
 from netkit.stream import Stream
 import gevent
 from gevent.server import StreamServer
@@ -28,17 +28,14 @@ class Connection(object):
             # 必须要启动一个新的greenlet，在greenlet里面执行readline
             # 否则会有内存泄漏
             def spawn_read():
-                message = self.stream.read_with_checker(Box().check)
+                message = self.stream.read_with_checker(LineBox().check)
                 #print "message, len: %s, content: %r" % (len(message), message)
 
                 if message:
-                    req_box = Box(message)
+                    req_box = LineBox(message)
                     print req_box
-                    rsp_box = Box()
-                    rsp_box.cmd = req_box.cmd
-                    rsp_box.ret = 1000
-                    rsp_box.version = 333
-                    rsp_box.body = 'ok'
+                    rsp_box = LineBox()
+                    rsp_box.body = u'那有怎样？哈哈哈哈哈，就是这个样子'
 
                     buf = rsp_box.pack()
                     self.stream.write(buf[:10])
