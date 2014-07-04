@@ -60,7 +60,7 @@ class LineBox(object):
         """
         打包
         """
-        return self.body
+        return self._body
 
     def unpack(self, buf, save=True):
         """
