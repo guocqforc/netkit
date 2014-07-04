@@ -1,11 +1,20 @@
 # -*- coding: utf-8 -*-
 """
 以\n为每个包的结束
+和box不太一样的时，body内部存的是bytes，而外面读取的是unicode
 """
 
 import json
 
 END_STR = '\n'
+ENCODING = 'utf-8'
+
+
+def safe_str(src):
+    if isinstance(src, unicode):
+        return src.encode(ENCODING)
+
+    return str(src)
 
 
 class LineBox(object):
@@ -16,6 +25,7 @@ class LineBox(object):
     # 如果调用unpack成功的话，会置为True
     _unpack_done = None
 
+    # 存储的话，还是统一用str
     _body = None
 
     def __init__(self, buf=None):
@@ -31,17 +41,15 @@ class LineBox(object):
 
     @property
     def body(self):
-        return self._body
+        # 返回时统一用unicode
+        return self._body.decode(ENCODING)
 
     @body.setter
     def body(self, value):
-        if value.endswith(END_STR):
-            self._body = value
-        else:
-            self._body = value + END_STR
+        if not value.endswith(END_STR):
+            value += END_STR
 
-        if isinstance(self._body, unicode):
-            self._body = self._body.encode('utf-8')
+        self._body = safe_str(value)
 
     def reset(self):
         self._unpack_done = False
@@ -77,7 +85,8 @@ class LineBox(object):
             # 如果不需要保存的话，就直接返回好了
             return packet_len
 
-        self.body = buf[:packet_len]
+        # 直接赋值减少判断
+        self._body = buf[:packet_len]
 
         self._unpack_done = True
 
