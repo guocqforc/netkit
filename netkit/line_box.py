@@ -125,4 +125,4 @@ class LineBox(object):
         self.body = json.dumps(value)
 
     def __repr__(self):
-        return repr(self.body)
+        return repr(self._body)
