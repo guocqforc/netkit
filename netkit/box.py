@@ -155,22 +155,21 @@ class Box(object):
         """
         return self.unpack(buf, save=False)
 
-    def map(self, **kwargs):
+    def map(self, map_data):
         """
         获取对应的response
-        :param kwargs:
+        :param : map_data
         :return:
         """
-        box = self.__class__()
+        assert isinstance(map_data, dict)
 
-        for attr_name in ('cmd', 'sn'):
-            if hasattr(self, attr_name):
-                setattr(box, attr_name, getattr(self, attr_name))
+        init_data = dict(
+            cmd=self.cmd,
+            sn=self.sn,
+        )
+        init_data.update(map_data)
 
-        for k, v in kwargs.items():
-            setattr(box, k, v)
-
-        return box
+        return self.__class__(init_data)
 
     def get_json(self):
         """

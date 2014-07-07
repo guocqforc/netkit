@@ -103,18 +103,13 @@ class LineBox(object):
         """
         return self.unpack(buf, save=False)
 
-    def map(self, **kwargs):
+    def map(self, map_data):
         """
         获取对应的response
-        :param kwargs:
+        :param :map_data
         :return:
         """
-        box = self.__class__()
-
-        for k, v in kwargs.items():
-            setattr(box, k, v)
-
-        return box
+        return self.__class__(map_data)
 
     def get_json(self):
         """
