@@ -28,12 +28,8 @@ class LineBox(object):
     # 存储的话，还是统一用str
     _body = None
 
-    def __init__(self, buf=None):
+    def __init__(self):
         self.reset()
-
-        # 为了简写代码
-        if buf:
-            self.unpack(buf)
 
     @property
     def unpack_done(self):

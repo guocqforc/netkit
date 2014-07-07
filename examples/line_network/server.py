@@ -32,7 +32,8 @@ class Connection(object):
                 #print "message, len: %s, content: %r" % (len(message), message)
 
                 if message:
-                    req_box = LineBox(message)
+                    req_box = LineBox()
+                    req_box.unpack(message)
                     print req_box
                     rsp_box = LineBox()
                     rsp_box.body = u'那有怎样？哈哈哈哈哈，就是这个样子'

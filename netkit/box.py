@@ -31,14 +31,10 @@ class Box(object):
 
     body = None
 
-    def __init__(self, buf=None, header_attrs=None):
+    def __init__(self, header_attrs=None):
         self._header_attrs = header_attrs or HEADER_ATTRS
 
         self.reset()
-
-        # 为了简写代码
-        if buf:
-            self.unpack(buf)
 
     @property
     def header_format(self):
