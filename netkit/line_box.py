@@ -104,6 +104,19 @@ class LineBox(object):
         """
         return self.unpack(buf, save=False)
 
+    def map(self, **kwargs):
+        """
+        获取对应的response
+        :param kwargs:
+        :return:
+        """
+        box = self.__class__()
+
+        for k, v in kwargs.items():
+            setattr(box, k, v)
+
+        return box
+
     def get_json(self):
         """
         解析为json格式
