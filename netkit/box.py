@@ -24,21 +24,23 @@ class Box(object):
     Box 打包解包
     """
 
-    _header_attrs = None
+    # 作为类变量存在即可
+    header_attrs = HEADER_ATTRS
 
     # 如果调用unpack成功的话，会置为True
     _unpack_done = None
 
     body = None
 
-    def __init__(self, header_attrs=None):
-        self._header_attrs = header_attrs or HEADER_ATTRS
-
+    def __init__(self, init_data=None):
         self.reset()
+        if init_data and isinstance(init_data, dict):
+            for k, v in init_data.items():
+                setattr(self, k, v)
 
     @property
     def header_format(self):
-        return '!' + ''.join(value[0] for value in self._header_attrs.values())
+        return '!' + ''.join(value[0] for value in self.header_attrs.values())
 
     @property
     def header_len(self):
@@ -69,7 +71,7 @@ class Box(object):
     def reset(self):
         self._unpack_done = False
 
-        for k, v in self._header_attrs.items():
+        for k, v in self.header_attrs.items():
             setattr(self, k, v[1])
 
         self.body = ''
@@ -78,7 +80,7 @@ class Box(object):
         """
         打包
         """
-        values = [getattr(self, k) for k in self._header_attrs]
+        values = [getattr(self, k) for k in self.header_attrs]
 
         values.append(self.body)
 
@@ -107,7 +109,7 @@ class Box(object):
             logger.error('unpack fail.', exc_info=True)
             return -1
 
-        dict_values = dict([(key, values[i]) for i, key in enumerate(self._header_attrs.keys())])
+        dict_values = dict([(key, values[i]) for i, key in enumerate(self.header_attrs.keys())])
 
         if hasattr(self, 'magic'):
             magic = dict_values.get('magic')
@@ -191,7 +193,7 @@ class Box(object):
         self.body = json.dumps(value)
 
     def __repr__(self):
-        values = [(k, getattr(self, k)) for k in self._header_attrs]
+        values = [(k, getattr(self, k)) for k in self.header_attrs]
 
         values.append(('body', self.body))
 
