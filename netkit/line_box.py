@@ -78,7 +78,7 @@ class LineBox(object):
             # 说明没有\n
             return 0
 
-        packet_len = found_idx + 1
+        packet_len = found_idx + len(END_STR)
 
         if not save:
             # 如果不需要保存的话，就直接返回好了
