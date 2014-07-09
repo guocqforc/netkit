@@ -149,11 +149,7 @@ class Stream(object):
             return -1
 
         while data:
-            try:
-                num_bytes = self.write_to_fd(data)
-            except:
-                logger.error('write fail.', exc_info=True)
-                num_bytes = None
+            num_bytes = self.write_to_fd(data)
 
             if num_bytes is None:
                 return -2
@@ -181,7 +177,12 @@ class Stream(object):
                 socket.IPPROTO_TCP, socket.TCP_NODELAY, 1 if value else 0)
 
     def read_from_fd(self):
-        chunk = self.sock.recv(self.read_chunk_size)
+        try:
+            chunk = self.sock.recv(self.read_chunk_size)
+        except:
+            # 如果异常，就认为链接断掉了
+            self.close()
+            return None
 
         if not chunk:
             self.close()
@@ -189,7 +190,11 @@ class Stream(object):
         return chunk
 
     def write_to_fd(self, data):
-        return self.sock.send(data)
+        try:
+            return self.sock.send(data)
+        except:
+            self.close()
+            return None
 
     def close_fd(self):
         if self.sock:
