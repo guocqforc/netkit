@@ -34,7 +34,7 @@ def lock_write(func):
 
 class Stream(object):
     """
-    从tornado的iostream衍生而来
+    参考tornado的iostream
     """
 
     def __init__(self, sock, max_buffer_size=None,
@@ -169,7 +169,7 @@ class Stream(object):
 
     def set_nodelay(self, value):
         """
-        直接抄的tornado
+        参考tornado
         """
         if (self.sock is not None and
                     self.sock.family in (socket.AF_INET, socket.AF_INET6)):
@@ -179,7 +179,7 @@ class Stream(object):
     def read_from_fd(self):
         """
         从fd里读取数据。
-        即使超时也不捕获异常，由外面捕获
+        超时不捕获异常，由外面捕获。其他错误则直接关闭连接
         :return:
         """
         try:
@@ -245,7 +245,7 @@ class Stream(object):
     def _read_to_buffer(self):
         """Reads from the socket and appends the result to the read buffer.
 
-        Returns the number of bytes read.  Returns None is remote closed.  On
+        Returns the number of bytes read.  Returns 0 is remote closed.  On
         error closes the socket and raises an exception.
         """
         chunk = self.read_from_fd()
