@@ -177,10 +177,19 @@ class Stream(object):
                 socket.IPPROTO_TCP, socket.TCP_NODELAY, 1 if value else 0)
 
     def read_from_fd(self):
+        """
+        从fd里读取数据。
+        即使超时也不捕获异常，由外面捕获
+        :return:
+        """
         try:
             chunk = self.sock.recv(self.read_chunk_size)
+        except socket.timeout, e:
+            # 服务器是不会recv超时的
+            raise e
         except:
-            # 如果异常，就认为链接断掉了
+            logger.error('exc occur.', exc_info=True)
+            # 其他都直接关闭
             self.close()
             return None
 
@@ -193,6 +202,7 @@ class Stream(object):
         try:
             return self.sock.send(data)
         except:
+            logger.error('exc occur.', exc_info=True)
             self.close()
             return None
 
@@ -235,8 +245,7 @@ class Stream(object):
     def _read_to_buffer(self):
         """Reads from the socket and appends the result to the read buffer.
 
-        Returns the number of bytes read.  Returns 0 if there is nothing
-        to read (i.e. the read returns EWOULDBLOCK or equivalent).  On
+        Returns the number of bytes read.  Returns None is remote closed.  On
         error closes the socket and raises an exception.
         """
         chunk = self.read_from_fd()
