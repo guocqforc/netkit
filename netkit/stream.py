@@ -203,7 +203,6 @@ class Stream(object):
             return self.sock.send(data)
         except:
             logger.error('exc occur.', exc_info=True)
-            self.close()
             return None
 
     def close_fd(self):
