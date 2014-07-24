@@ -146,17 +146,17 @@ class Stream(object):
         """
 
         if self.closed():
-            return -1
+            return False
 
         while data:
             num_bytes = self.write_to_fd(data)
 
             if num_bytes is None:
-                return -2
+                return False
 
             data = data[num_bytes:]
 
-        return 0
+        return True
 
     def closed(self):
         return not self.sock
