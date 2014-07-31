@@ -73,10 +73,8 @@ class Stream(object):
         """
         if self.closed():
             return
-        try:
-            self.sock.shutdown(how)
-        finally:
-            pass
+
+        self.shutdown_fd(how)
 
     @lock_read
     def read_until_regex(self, regex):
@@ -167,15 +165,6 @@ class Stream(object):
     def writing(self):
         return self.write_lock.locked()
 
-    def set_nodelay(self, value):
-        """
-        参考tornado
-        """
-        if (self.sock is not None and
-                    self.sock.family in (socket.AF_INET, socket.AF_INET6)):
-            self.sock.setsockopt(
-                socket.IPPROTO_TCP, socket.TCP_NODELAY, 1 if value else 0)
-
     def read_from_fd(self):
         """
         从fd里读取数据。
@@ -206,11 +195,16 @@ class Stream(object):
             return None
 
     def close_fd(self):
-        if self.sock:
-            try:
-                self.sock.close()
-            finally:
-                self.sock = None
+        try:
+            self.sock.close()
+        finally:
+            self.sock = None
+
+    def shutdown_fd(self, how=2):
+        try:
+            self.sock.shutdown(how)
+        finally:
+            pass
 
     def _try_inline_read(self):
         """Attempt to complete the current read operation from buffered data.
