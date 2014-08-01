@@ -197,14 +197,16 @@ class Stream(object):
     def close_fd(self):
         try:
             self.sock.close()
+        except:
+            logger.error('exc occur.', exc_info=True)
         finally:
             self.sock = None
 
     def shutdown_fd(self, how=2):
         try:
             self.sock.shutdown(how)
-        finally:
-            pass
+        except:
+            logger.error('exc occur.', exc_info=True)
 
     def _try_inline_read(self):
         """Attempt to complete the current read operation from buffered data.
