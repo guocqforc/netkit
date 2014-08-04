@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from netkit.box import Box
 from netkit.stream import Stream
+from reimp import logger, Box
 
-import time
-import logging
 import socket
-
-logger = logging.getLogger('netkit')
-logger.addHandler(logging.StreamHandler())
-logger.setLevel(logging.DEBUG)
 
 address = ('127.0.0.1', 7777)
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,7 +12,6 @@ s.connect(address)
 stream = Stream(s)
 
 box = Box()
-box.cmd = 32
 box.body = '我爱你'
 
 stream.write(box.pack())

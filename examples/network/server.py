@@ -5,16 +5,10 @@
 
 from gevent import monkey;monkey.patch_all()
 
-from netkit.box import Box
 from netkit.stream import Stream
 import gevent
 from gevent.server import StreamServer
-import logging
-
-logger = logging.getLogger('netkit')
-logger.addHandler(logging.StreamHandler())
-logger.addHandler(logging.FileHandler('s.log'))
-logger.setLevel(logging.DEBUG)
+from reimp import logger, Box
 
 
 class Connection(object):
@@ -35,15 +29,11 @@ class Connection(object):
                     req_box = Box()
                     req_box.unpack(message)
                     print req_box
-                    rsp_box = Box()
-                    rsp_box.cmd = req_box.cmd
-                    rsp_box.ret = 1000
-                    rsp_box.version = 333
-                    rsp_box.body = 'ok'
+                    req_box.body = 'ok'
 
-                    buf = rsp_box.pack()
-                    self.stream.write(buf[:10])
-                    self.stream.write(buf[10:])
+                    buf = req_box.pack()
+                    self.stream.write(buf[:2])
+                    self.stream.write(buf[2:])
 
                 if self.stream.closed():
                     print 'client closed'
