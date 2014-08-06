@@ -17,6 +17,13 @@ HEADER_ATTRS = OrderedDict([
     ('ret', ('i', 0)),
     ('sn', ('i', 0)),
 ])
+# 字节对齐的方式
+# @: native order, size & alignment (default)
+# =: native order, std. size & alignment
+# <: little-endian, std. size & alignment
+# >: big-endian, std. size & alignment
+# !: same as >
+HEADER_FORMAT_TYPE = '!'
 
 
 class Box(object):
@@ -24,8 +31,13 @@ class Box(object):
     Box 打包解包
     """
 
-    # 作为类变量存在即可
+    # 继承时可修改
     header_attrs = HEADER_ATTRS
+    # 继承时可修改
+    header_format_type = HEADER_FORMAT_TYPE
+
+    header_format = None
+    header_len = None
 
     # 如果调用unpack成功的话，会置为True
     _unpack_done = None
@@ -37,14 +49,6 @@ class Box(object):
         if init_data and isinstance(init_data, dict):
             for k, v in init_data.items():
                 setattr(self, k, v)
-
-    @property
-    def header_format(self):
-        return '!' + ''.join(value[0] for value in self.header_attrs.values())
-
-    @property
-    def header_len(self):
-        return struct.calcsize(self.header_format)
 
     @property
     def body_len(self):
@@ -73,6 +77,9 @@ class Box(object):
 
         for k, v in self.header_attrs.items():
             setattr(self, k, v[1])
+
+        self.header_format = self.header_format_type + ''.join(value[0] for value in self.header_attrs.values())
+        self.header_len = struct.calcsize(self.header_format)
 
         self.body = ''
 
