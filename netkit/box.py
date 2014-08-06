@@ -82,9 +82,7 @@ class Box(object):
         """
         values = [getattr(self, k) for k in self.header_attrs]
 
-        values.append(self.body)
-
-        return struct.pack(self.header_format + '%ds' % self.body_len, *values)
+        return struct.pack(self.header_format, *values) + self.body
 
     def unpack(self, buf, save=True):
         """
