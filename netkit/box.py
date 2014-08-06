@@ -17,13 +17,6 @@ HEADER_ATTRS = OrderedDict([
     ('ret', ('i', 0)),
     ('sn', ('i', 0)),
 ])
-# 字节对齐的方式
-# @: native order, size & alignment (default)
-# =: native order, std. size & alignment
-# <: little-endian, std. size & alignment
-# >: big-endian, std. size & alignment
-# !: same as >
-HEADER_FORMAT_TYPE = '!'
 
 
 class Box(object):
@@ -33,10 +26,10 @@ class Box(object):
 
     # 继承时可修改
     header_attrs = HEADER_ATTRS
-    # 继承时可修改
-    header_format_type = HEADER_FORMAT_TYPE
+    # 网络字节序. 继承时可修改
+    header_fmt_type = '!'
 
-    header_format = None
+    header_fmt = None
     header_len = None
 
     # 如果调用unpack成功的话，会置为True
@@ -78,8 +71,8 @@ class Box(object):
         for k, v in self.header_attrs.items():
             setattr(self, k, v[1])
 
-        self.header_format = self.header_format_type + ''.join(value[0] for value in self.header_attrs.values())
-        self.header_len = struct.calcsize(self.header_format)
+        self.header_fmt = self.header_fmt_type + ''.join(value[0] for value in self.header_attrs.values())
+        self.header_len = struct.calcsize(self.header_fmt)
 
         self.body = ''
 
@@ -89,7 +82,7 @@ class Box(object):
         """
         values = [getattr(self, k) for k in self.header_attrs]
 
-        return struct.pack(self.header_format, *values) + self.body
+        return struct.pack(self.header_fmt, *values) + self.body
 
     def unpack(self, buf, save=True):
         """
@@ -109,7 +102,7 @@ class Box(object):
             return 0
 
         try:
-            values = struct.unpack(self.header_format, buf[:self.header_len])
+            values = struct.unpack(self.header_fmt, buf[:self.header_len])
         except Exception, e:
             logger.error('unpack fail.', exc_info=True)
             return -1
