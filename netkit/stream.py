@@ -5,8 +5,10 @@ import functools
 import numbers
 import collections
 import re
-from threading import Lock
 from .log import logger
+
+MAX_BUFFER_SIZE = 104857600
+READ_CHUNK_SIZE = 4906
 
 
 def lock_read(func):
@@ -38,10 +40,10 @@ class Stream(object):
     """
 
     def __init__(self, sock, max_buffer_size=None,
-                 read_chunk_size=4096):
+                 read_chunk_size=None, use_gevent=False):
         self.sock = sock
-        self.max_buffer_size = max_buffer_size or 104857600
-        self.read_chunk_size = read_chunk_size
+        self.max_buffer_size = max_buffer_size or MAX_BUFFER_SIZE
+        self.read_chunk_size = read_chunk_size or READ_CHUNK_SIZE
 
         self._read_buffer = collections.deque()
         self._read_buffer_size = 0
@@ -50,6 +52,11 @@ class Stream(object):
         self._read_bytes = None
         self._read_until_close = False
         self._read_checker = None
+
+        if use_gevent:
+            from gevent.lock import Semaphore as Lock
+        else:
+            from threading import Lock
 
         self.read_lock = Lock()
         self.write_lock = Lock()
