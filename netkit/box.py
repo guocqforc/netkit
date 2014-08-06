@@ -38,6 +38,9 @@ class Box(object):
     body = None
 
     def __init__(self, init_data=None):
+        self.header_fmt = self.header_fmt_type + ''.join(value[0] for value in self.header_attrs.values())
+        self.header_len = struct.calcsize(self.header_fmt)
+
         self.reset()
         if init_data and isinstance(init_data, dict):
             for k, v in init_data.items():
@@ -70,9 +73,6 @@ class Box(object):
 
         for k, v in self.header_attrs.items():
             setattr(self, k, v[1])
-
-        self.header_fmt = self.header_fmt_type + ''.join(value[0] for value in self.header_attrs.values())
-        self.header_len = struct.calcsize(self.header_fmt)
 
         self.body = ''
 
