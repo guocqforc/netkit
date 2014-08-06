@@ -33,7 +33,7 @@ class Box(object):
     header_len = None
 
     # 如果调用unpack成功的话，会置为True
-    _unpack_done = None
+    unpack_done = None
 
     body = None
 
@@ -64,12 +64,8 @@ class Box(object):
         # 什么也不需要做，因为不能让别人来赋值
         pass
 
-    @property
-    def unpack_done(self):
-        return self._unpack_done
-
     def reset(self):
-        self._unpack_done = False
+        self.unpack_done = False
 
         for k, v in self.header_attrs.items():
             setattr(self, k, v[1])
@@ -137,7 +133,7 @@ class Box(object):
 
         self.body = buf[self.header_len:packet_len]
 
-        self._unpack_done = True
+        self.unpack_done = True
 
         return self.packet_len
 
