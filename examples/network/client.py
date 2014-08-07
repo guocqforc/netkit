@@ -16,7 +16,7 @@ box.body = '我爱你'
 
 stream.write(box.pack())
 
-while True:
+while 1:
     # 阻塞
     buf = stream.read_with_checker(Box().unpack)
 

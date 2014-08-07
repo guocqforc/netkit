@@ -88,7 +88,7 @@ class Stream(object):
         """Run when we read the given regex pattern.
         """
         self._read_regex = re.compile(regex)
-        while True:
+        while 1:
             ret, data = self._try_inline_read()
             if ret <= 0:
                 return data
@@ -100,7 +100,7 @@ class Stream(object):
         """
 
         self._read_delimiter = delimiter
-        while True:
+        while 1:
             ret, data = self._try_inline_read()
             if ret <= 0:
                 return data
@@ -111,7 +111,7 @@ class Stream(object):
         """
         assert isinstance(num_bytes, numbers.Integral)
         self._read_bytes = num_bytes
-        while True:
+        while 1:
             ret, data = self._try_inline_read()
             if ret <= 0:
                 return data
@@ -124,7 +124,7 @@ class Stream(object):
             return self._consume(self._read_buffer_size)
 
         self._read_until_close = True
-        while True:
+        while 1:
             ret, data = self._try_inline_read()
             if ret <= 0:
                 return data
@@ -139,7 +139,7 @@ class Stream(object):
         """
 
         self._read_checker = checker
-        while True:
+        while 1:
             ret, data = self._try_inline_read()
             if ret <= 0:
                 return data
@@ -282,7 +282,7 @@ class Stream(object):
             # since large merges are relatively expensive and get undone in
             # consume().
             if self._read_buffer:
-                while True:
+                while 1:
                     loc = self._read_buffer[0].find(self._read_delimiter)
                     if loc != -1:
                         delimiter_len = len(self._read_delimiter)
@@ -293,7 +293,7 @@ class Stream(object):
                     _double_prefix(self._read_buffer)
         elif self._read_regex is not None:
             if self._read_buffer:
-                while True:
+                while 1:
                     m = self._read_regex.search(self._read_buffer[0])
                     if m is not None:
                         self._read_regex = None
@@ -303,7 +303,7 @@ class Stream(object):
                     _double_prefix(self._read_buffer)
         elif self._read_checker is not None:
             if self._read_buffer:
-                while True:
+                while 1:
                     loc = self._read_checker(self._read_buffer[0])
                     if loc > 0:
                         # 说明就是要这些长度
