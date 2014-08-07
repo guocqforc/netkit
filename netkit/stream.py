@@ -54,12 +54,12 @@ class Stream(object):
         self._read_checker = None
 
         if use_gevent:
-            from gevent.lock import Semaphore as Lock
+            from gevent.lock import Semaphore
         else:
-            from threading import Lock
+            from threading import Semaphore
 
-        self.read_lock = Lock()
-        self.write_lock = Lock()
+        self.read_lock = Semaphore()
+        self.write_lock = Semaphore()
 
     def close(self, exc_info=False):
         if self.closed():
