@@ -22,7 +22,7 @@ class Connection(object):
             # 必须要启动一个新的greenlet，在greenlet里面执行readline
             # 否则会有内存泄漏
             def spawn_read():
-                message = self.stream.read_with_checker(Box().check)
+                message = self.stream.read_with_checker(Box.instance().check)
                 #print "message, len: %s, content: %r" % (len(message), message)
 
                 if message:

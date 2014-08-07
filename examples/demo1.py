@@ -10,3 +10,7 @@ box2 = Box()
 box2.unpack(box1.pack())
 
 print box2
+
+box3 = Box.instance()
+box4 = Box.instance()
+print id(box3), id(box4)
