@@ -28,7 +28,11 @@ class TcpClient(object):
         """
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(self.timeout)
-        sock.connect((self.host, self.port))
+        try:
+            sock.connect((self.host, self.port))
+        except Exception, e:
+            sock.close()
+            raise e
 
         self.stream = Stream(sock)
 
