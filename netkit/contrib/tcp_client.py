@@ -26,13 +26,12 @@ class TcpClient(object):
         self.stream = Stream(sock)
 
     def connect(self):
+        """
+        连接服务器，失败会抛出异常
+        :return:
+        """
         address = (self.host, self.port)
-        try:
-            self.stream.sock.connect(address)
-        except:
-            return False
-
-        return True
+        self.stream.sock.connect(address)
 
     def read(self):
         """

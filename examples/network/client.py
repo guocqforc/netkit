@@ -1,32 +1,27 @@
 # -*- coding: utf-8 -*-
 
-from netkit.stream import Stream
+from netkit.contrib.tcp_client import TcpClient
 from reimp import logger, Box
 
-import socket
 
-address = ('127.0.0.1', 7777)
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(address)
+tcp_client = TcpClient(Box, '127.0.0.1', 7777)
 
-stream = Stream(s)
+tcp_client.connect()
 
 box = Box()
 box.body = '我爱你'
 
-stream.write(box.pack())
+tcp_client.write(box)
 
 while 1:
     # 阻塞
-    buf = stream.read_with_checker(Box().unpack)
+    box = tcp_client.read()
 
-    if buf:
-        box = Box()
-        box.unpack(buf)
+    if box:
         print box
 
-    if stream.closed():
+    if tcp_client.closed():
         print 'server closed'
         break
 
-s.close()
+tcp_client.close()
