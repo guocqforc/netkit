@@ -15,10 +15,10 @@ def lock_read(func):
     @functools.wraps(func)
     def func_wrapper(stream, *args, **kwargs):
         try:
-            stream.read_lock.acquire()
+            stream.acquire_read_lock()
             return func(stream, *args, **kwargs)
         finally:
-            stream.read_lock.release()
+            stream.release_read_lock()
 
     return func_wrapper
 
@@ -27,10 +27,10 @@ def lock_write(func):
     @functools.wraps(func)
     def func_wrapper(stream, *args, **kwargs):
         try:
-            stream.write_lock.acquire()
+            stream.acquire_write_lock()
             return func(stream, *args, **kwargs)
         finally:
-            stream.write_lock.release()
+            stream.release_write_lock()
     return func_wrapper
 
 
@@ -165,6 +165,18 @@ class Stream(object):
 
     def closed(self):
         return not self.sock
+
+    def acquire_read_lock(self):
+        self.read_lock.acquire()
+
+    def release_read_lock(self):
+        self.read_lock.release()
+
+    def acquire_write_lock(self):
+        self.write_lock.acquire()
+
+    def release_write_lock(self):
+        self.write_lock.release()
 
     def reading(self):
         return self.read_lock.locked()
