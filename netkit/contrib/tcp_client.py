@@ -32,6 +32,8 @@ class TcpClient(object):
         except:
             return False
 
+        return True
+
     def read(self):
         data = self.stream.read_with_checker(self.box_class.instance().check)
         if not data:
