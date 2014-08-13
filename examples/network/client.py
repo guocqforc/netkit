@@ -17,10 +17,9 @@ while 1:
     # 阻塞
     box = tcp_client.read()
 
-    if box:
-        print box
+    print box
 
-    if tcp_client.closed():
+    if not box:
         print 'server closed'
         break
 
