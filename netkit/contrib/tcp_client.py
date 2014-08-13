@@ -35,6 +35,10 @@ class TcpClient(object):
         return True
 
     def read(self):
+        """
+        如果超时会抛出异常 socket.timeout
+        :return:
+        """
         data = self.stream.read_with_checker(self.box_class.instance().check)
         if not data:
             return None
@@ -45,6 +49,11 @@ class TcpClient(object):
         return box
 
     def write(self, data):
+        """
+        写入
+        :param data:
+        :return:    True/False
+        """
         if isinstance(data, self.box_class):
             data = data.pack()
 
