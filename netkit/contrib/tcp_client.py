@@ -21,23 +21,25 @@ class TcpClient(object):
         self.port = port
         self.timeout = timeout
 
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(self.timeout)
-        self.stream = Stream(sock)
-
     def connect(self):
         """
         连接服务器，失败会抛出异常
         :return:
         """
-        address = (self.host, self.port)
-        self.stream.sock.connect(address)
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(self.timeout)
+        sock.connect((self.host, self.port))
+
+        self.stream = Stream(sock)
 
     def read(self):
         """
         如果超时会抛出异常 socket.timeout
         :return:
         """
+        if self.closed():
+            return None
+
         data = self.stream.read_with_checker(self.box_class.instance().check)
         if not data:
             return None
@@ -53,13 +55,22 @@ class TcpClient(object):
         :param data:
         :return:    True/False
         """
+        if self.closed():
+            return False
+
         if isinstance(data, self.box_class):
             data = data.pack()
 
         return self.stream.write(data)
 
     def close(self):
+        if not self.stream:
+            return
+
         return self.stream.close()
 
     def closed(self):
+        if not self.stream:
+            return True
+
         return self.stream.closed()
