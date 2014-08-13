@@ -11,6 +11,12 @@ MAX_BUFFER_SIZE = 104857600
 READ_CHUNK_SIZE = 4906
 
 
+LOCK_MODE_NONE = 0
+LOCK_MODE_READ = 1
+LOCK_MODE_WRITE = 2
+LOCK_MODE_RDWR = LOCK_MODE_READ | LOCK_MODE_WRITE
+
+
 def lock_read(func):
     @functools.wraps(func)
     def func_wrapper(stream, *args, **kwargs):
@@ -39,8 +45,14 @@ class Stream(object):
     参考tornado的iostream
     """
 
+    read_lock = None
+    write_lock = None
+
+    reading = False
+    writing = False
+
     def __init__(self, sock, max_buffer_size=None,
-                 read_chunk_size=None, use_gevent=False):
+                 read_chunk_size=None, use_gevent=False, lock_mode=LOCK_MODE_RDWR):
         self.sock = sock
         self.max_buffer_size = max_buffer_size or MAX_BUFFER_SIZE
         self.read_chunk_size = read_chunk_size or READ_CHUNK_SIZE
@@ -58,8 +70,11 @@ class Stream(object):
         else:
             from threading import Lock
 
-        self.read_lock = Lock()
-        self.write_lock = Lock()
+        if lock_mode & LOCK_MODE_READ:
+            self.read_lock = Lock()
+
+        if lock_mode & LOCK_MODE_WRITE:
+            self.write_lock = Lock()
 
     def close(self, exc_info=False):
         if self.closed():
@@ -167,22 +182,24 @@ class Stream(object):
         return not self.sock
 
     def acquire_read_lock(self):
-        self.read_lock.acquire()
+        self.reading = True
+        if self.read_lock:
+            self.read_lock.acquire()
 
     def release_read_lock(self):
-        self.read_lock.release()
+        self.reading = False
+        if self.read_lock:
+            self.read_lock.release()
 
     def acquire_write_lock(self):
-        self.write_lock.acquire()
+        self.writing = True
+        if self.write_lock:
+            self.write_lock.acquire()
 
     def release_write_lock(self):
-        self.write_lock.release()
-
-    def reading(self):
-        return self.read_lock.locked()
-
-    def writing(self):
-        return self.write_lock.locked()
+        self.writing = False
+        if self.write_lock:
+            self.write_lock.release()
 
     def read_from_fd(self):
         """
