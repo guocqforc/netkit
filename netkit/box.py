@@ -117,12 +117,9 @@ class Box(object):
 
         dict_values = dict([(key, values[i]) for i, key in enumerate(self.header_attrs.keys())])
 
-        if hasattr(self, 'magic'):
-            magic = dict_values.get('magic')
-            if magic != self.magic:
-                logger.error('magic not equal. %s != %s' % (magic, self.magic))
-                # raise ValueError('magic not equal. %s != %s' % (magic, HEADER_MAGIC))
-                return -2
+        if not self.verify_header(dict_values):
+            # 检验失败
+            return -2
 
         if 'packet_len' in dict_values:
             packet_len = dict_values.get('packet_len')
@@ -160,6 +157,21 @@ class Box(object):
             0: 继续收
         """
         return self.unpack(buf, save=False)
+
+    def verify_header(self, dict_values):
+        """
+        验证包头合法性
+        :return:
+        """
+        right_magic = getattr(self.header_attrs, 'magic', None)
+
+        if right_magic is not None:
+            magic = dict_values.get('magic')
+            if magic != right_magic:
+                logger.error('magic not equal. %s != %s' % (magic, right_magic))
+                return False
+
+        return True
 
     def map(self, map_data):
         """
