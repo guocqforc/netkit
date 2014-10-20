@@ -7,8 +7,7 @@ import collections
 import re
 from .log import logger
 
-MAX_BUFFER_SIZE = 104857600
-READ_CHUNK_SIZE = 4906
+READ_CHUNK_SIZE = 65536
 
 
 LOCK_MODE_NONE = 0
@@ -51,10 +50,10 @@ class Stream(object):
     reading = False
     writing = False
 
-    def __init__(self, sock, max_buffer_size=None,
+    def __init__(self, sock, max_buffer_size=-1,
                  read_chunk_size=None, use_gevent=False, lock_mode=LOCK_MODE_RDWR):
         self.sock = sock
-        self.max_buffer_size = max_buffer_size or MAX_BUFFER_SIZE
+        self.max_buffer_size = max_buffer_size
         self.read_chunk_size = read_chunk_size or READ_CHUNK_SIZE
 
         self._read_buffer = collections.deque()
@@ -286,7 +285,7 @@ class Stream(object):
 
         self._read_buffer.append(chunk)
         self._read_buffer_size += len(chunk)
-        if self._read_buffer_size >= self.max_buffer_size:
+        if self.max_buffer_size >= 0 and self._read_buffer_size >= self.max_buffer_size:
             logger.error("Reached maximum read buffer size")
             self.close()
             raise IOError("Reached maximum read buffer size")
