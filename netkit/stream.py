@@ -7,7 +7,7 @@ import collections
 import re
 from .log import logger
 
-READ_CHUNK_SIZE = 65536
+READ_CHUNK_SIZE = 4096
 
 
 LOCK_MODE_NONE = 0
