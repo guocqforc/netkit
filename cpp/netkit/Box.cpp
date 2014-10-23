@@ -60,6 +60,12 @@ int Box::pack(char* buf, int maxsize) {
     return this->packetLen();
 }
 
+int Box::pack(std::string& str) {
+    str.resize(this->packetLen());
+
+    return pack((char*) str.c_str(), str.size());
+}
+
 int Box::unpack(const char* buf, int length) {
     return this->_unpack(buf, length, true);
 }

@@ -98,14 +98,13 @@ int Stream::write(IBox* box) {
     }
 
     std::string str;
-    str.resize(box->packetLen());
 
-    int packetLen = box->pack((char*)str.c_str(), str.size());
-    if (!packetLen) {
+    int packetLen = box->pack(str);
+    if (packetLen < 0) {
         return -2;
     }
 
-    return write(str.c_str(), packetLen);
+    return write(str.c_str(), str.size());
 }
 
 int Stream::write(const char* buf, int bufLen) {

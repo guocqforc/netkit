@@ -19,6 +19,8 @@ public:
     // <0:  报错
     virtual int pack(char* buf, int maxsize)=0;
 
+    virtual int pack(std::string& str)=0;
+
     virtual int unpack(const char* buf, int length)=0;
 
     virtual int check(const char* buf, int length)=0;

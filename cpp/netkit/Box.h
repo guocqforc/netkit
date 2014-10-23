@@ -37,6 +37,8 @@ public:
 
     virtual int pack(char* buf, int maxsize);
 
+    virtual int pack(std::string& str);
+
     virtual int unpack(const char* buf, int length);
 
     virtual int check(const char* buf, int length);
