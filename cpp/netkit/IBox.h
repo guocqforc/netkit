@@ -24,6 +24,8 @@ public:
     virtual int check(const char* buf, int length)=0;
 
     virtual int packetLen()=0;
+
+    virtual std::string toString()=0;
 };
 
 }
