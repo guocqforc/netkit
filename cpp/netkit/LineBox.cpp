@@ -13,6 +13,8 @@ LineBox::LineBox() {
     this->_unpack_done = false;
 }
 
+LineBox::~LineBox() {}
+
 int LineBox::pack(char* buf, int maxsize) {
     if (maxsize < this->packetLen()) {
         return -1;

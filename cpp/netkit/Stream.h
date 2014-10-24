@@ -43,6 +43,7 @@ private:
 public:
     Stream(SocketType sockFd);
     Stream(SocketType sockFd, int initReadBufferSize);
+    virtual ~Stream();
 
     // 0 为成功
     int read(IBox* box);

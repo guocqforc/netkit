@@ -28,6 +28,8 @@ Box::Box() {
     this->_unpack_done = false;
 }
 
+Box::~Box() {}
+
 int Box::pack(char* buf, int maxsize) {
     if (maxsize < this->packetLen()) {
         // 说明包长都不够

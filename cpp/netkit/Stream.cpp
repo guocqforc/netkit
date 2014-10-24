@@ -36,6 +36,8 @@ Stream::Stream(SocketType sockFd, int initReadBufferSize) {
     _init(sockFd, initReadBufferSize);
 }
 
+Stream::~Stream() {}
+
 int Stream::read(IBox* box) {
     if (isClosed()) {
         return -1;

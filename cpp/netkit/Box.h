@@ -34,6 +34,7 @@ private:
 
 public:
     Box();
+    virtual ~Box();
 
     virtual int pack(char* buf, int maxsize);
 

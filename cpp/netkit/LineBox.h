@@ -27,6 +27,7 @@ private:
 
 public:
     LineBox();
+    virtual ~LineBox();
 
     virtual int pack(char* buf, int maxsize);
 
