@@ -69,6 +69,10 @@ void LineBox::setBody(const char* p_body, int body_len) {
     }
 }
 
+void LineBox::setBody(const std::string& str) {
+    setBody(str.c_str(), str.size());
+}
+
 int LineBox::headerLen() {
     return 0;
 }

@@ -148,6 +148,10 @@ void Box::setBody(const char* p_body, int body_len) {
     memcpy((void*)this->_body.c_str(), p_body, body_len);
 }
 
+void Box::setBody(const std::string& str) {
+    setBody(str.c_str(), str.size());
+}
+
 int Box::headerLen() {
     return sizeof(this->magic) + sizeof(this->version) + sizeof(this->_transfer_packet_len)
         + sizeof(this->cmd) + sizeof(this->ret) + sizeof(this->sn);

@@ -42,6 +42,7 @@ public:
     const char* getBody();
     const std::string& getStringBody();
     void setBody(const char* p_body, int body_len);
+    void setBody(const std::string& str);
 
     int headerLen();
     int bodyLen();
