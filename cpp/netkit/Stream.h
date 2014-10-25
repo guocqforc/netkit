@@ -52,6 +52,10 @@ public:
     int write(IBox* box);
     int write(const char* buf, int bufLen);
 
+    // 关闭输入输出
+    // 可以触发read报错
+    void shutdownStream(int how);
+
     void closeStream();
 
     bool isClosed();

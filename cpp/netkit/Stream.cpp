@@ -125,6 +125,10 @@ int Stream::write(const char* buf, int bufLen) {
     return 0;
 }
 
+void Stream::shutdownStream(int how) {
+    shutdown(m_sockFd, how);
+}
+
 void Stream::closeStream() {
     if (m_sockFd > 0) {
         CLOSE_SOCKET(m_sockFd);

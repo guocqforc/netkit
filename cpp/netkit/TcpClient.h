@@ -29,6 +29,8 @@ public:
     int write(IBox* box);
     int write(const char* buf, int bufLen);
 
+    void shutdownStream(int how);
+
     void closeStream();
 
     bool isClosed();

@@ -98,6 +98,14 @@ int TcpClient::write(const char* buf, int bufLen) {
     return m_stream->write(buf, bufLen);
 }
 
+void TcpClient::shutdownStream(int how) {
+    if (!m_stream) {
+        return;
+    }
+
+    return m_stream->shutdownStream(how);
+}
+
 void TcpClient::closeStream() {
     if (!m_stream) {
         return;
