@@ -33,7 +33,7 @@ TcpClient::~TcpClient() {
     }
 }
 
-int TcpClient::connectServer() {
+int TcpClient::connect() {
 
     struct sockaddr_in serv_addr;
     struct in_addr ip_addr;
@@ -46,7 +46,7 @@ int TcpClient::connectServer() {
 
     SocketType sockFd;
 
-    sockFd = socket(AF_INET, SOCK_STREAM, 0);
+    sockFd = ::socket(AF_INET, SOCK_STREAM, 0);
     if ( sockFd < 0 )
     {
         return -1;
@@ -61,7 +61,7 @@ int TcpClient::connectServer() {
         setsockopt(sockFd,SOL_SOCKET,SO_RCVTIMEO,(char*)&timeout,sizeof(timeout));
     }
 
-    int ret = connect(sockFd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
+    int ret = ::connect(sockFd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
     if (ret < 0) {
         CLOSE_SOCKET(sockFd);
         return -2;
@@ -98,20 +98,20 @@ int TcpClient::write(const char* buf, int bufLen) {
     return m_stream->write(buf, bufLen);
 }
 
-void TcpClient::shutdownStream(int how) {
+void TcpClient::shutdown(int how) {
     if (!m_stream) {
         return;
     }
 
-    return m_stream->shutdownStream(how);
+    return m_stream->shutdown(how);
 }
 
-void TcpClient::closeStream() {
+void TcpClient::close() {
     if (!m_stream) {
         return;
     }
 
-    return m_stream->closeStream();
+    return m_stream->close();
 }
 
 bool TcpClient::isClosed() {

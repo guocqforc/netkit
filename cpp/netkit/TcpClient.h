@@ -20,7 +20,7 @@ public:
     TcpClient(const std::string &host, short port, double timeout);
     virtual ~TcpClient();
 
-    int connectServer();
+    int connect();
 
     // 0 为成功
     int read(IBox* box);
@@ -29,9 +29,9 @@ public:
     int write(IBox* box);
     int write(const char* buf, int bufLen);
 
-    void shutdownStream(int how);
+    void shutdown(int how);
 
-    void closeStream();
+    void close();
 
     bool isClosed();
 

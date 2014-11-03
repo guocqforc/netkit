@@ -38,6 +38,10 @@ Stream::Stream(SocketType sockFd, int initReadBufferSize) {
 
 Stream::~Stream() {}
 
+void Stream::setSockFd(SocketType sockFd) {
+    m_sockFd = sockFd;
+}
+
 int Stream::read(IBox* box) {
     if (isClosed()) {
         return -1;
@@ -74,7 +78,7 @@ int Stream::read(IBox* box) {
             m_readBuffer.resize(m_readBuffer.size()*2);
         }
 
-        int len = recv(m_sockFd, (char*)m_readBuffer.c_str() + m_bufferedLength, m_readBuffer.size() - m_bufferedLength, 0);
+        int len = ::recv(m_sockFd, (char*)m_readBuffer.c_str() + m_bufferedLength, m_readBuffer.size() - m_bufferedLength, 0);
         // -1：当server关闭的时候会报这个错误
         if (len <= 0) {
             // 说明报错了，或者连接失败了
@@ -84,7 +88,7 @@ int Stream::read(IBox* box) {
                 return RET_RECV_TIMEOUT;
             }
             //printf("len: %d\n, errno: %d, %s", len, errno, strerror(errno), EAGAIN);
-            closeStream();
+            close();
             return -3;
         }
 
@@ -114,7 +118,7 @@ int Stream::write(const char* buf, int bufLen) {
     int sentLen = 0;
 
     while (sentLen < bufLen) {
-        int len = send(m_sockFd, buf + sentLen, bufLen - sentLen, 0);
+        int len = ::send(m_sockFd, buf + sentLen, bufLen - sentLen, 0);
         if (len < 0) {
             return -3;
         }
@@ -125,11 +129,11 @@ int Stream::write(const char* buf, int bufLen) {
     return 0;
 }
 
-void Stream::shutdownStream(int how) {
-    shutdown(m_sockFd, how);
+void Stream::shutdown(int how) {
+    ::shutdown(m_sockFd, how);
 }
 
-void Stream::closeStream() {
+void Stream::close() {
     if (m_sockFd > 0) {
         CLOSE_SOCKET(m_sockFd);
         m_sockFd = 0;

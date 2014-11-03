@@ -22,7 +22,7 @@ typedef SOCKET SocketType;
 #else
 typedef int SocketType;
 
-#define CLOSE_SOCKET    close
+#define CLOSE_SOCKET    ::close
 #endif
 
 class Stream {
@@ -45,6 +45,8 @@ public:
     Stream(SocketType sockFd, int initReadBufferSize);
     virtual ~Stream();
 
+    void setSockFd(SocketType sockFd);
+
     // 0 为成功
     int read(IBox* box);
 
@@ -54,9 +56,9 @@ public:
 
     // 关闭输入输出
     // 可以触发read报错
-    void shutdownStream(int how);
+    void shutdown(int how);
 
-    void closeStream();
+    void close();
 
     bool isClosed();
 
