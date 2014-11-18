@@ -51,18 +51,6 @@ class Box(object):
             for k, v in init_data.items():
                 setattr(self, k, v)
 
-    @classmethod
-    def instance(cls):
-        """
-        为了方便调用check函数，而不用每次都生成一个实例
-        :return:
-        """
-        _instance = getattr(cls, '_instance', None)
-        if _instance is None:
-            _instance = cls._instance = cls()
-
-        return _instance
-
     @property
     def body_len(self):
         return len(self.body)
