@@ -29,7 +29,10 @@ class LineBox(object):
     _body = None
 
     def __init__(self, init_data=None):
-        self.reset()
+        self._unpack_done = False
+
+        self.body = ''
+
         if init_data and isinstance(init_data, dict):
             for k, v in init_data.items():
                 setattr(self, k, v)
@@ -61,11 +64,6 @@ class LineBox(object):
             value += END_STR
 
         self._body = safe_str(value)
-
-    def reset(self):
-        self._unpack_done = False
-
-        self.body = ''
 
     def pack(self):
         """

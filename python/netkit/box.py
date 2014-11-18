@@ -41,7 +41,12 @@ class Box(object):
         self.header_fmt = self.header_fmt_type + ''.join(value[0] for value in self.header_attrs.values())
         self.header_len = struct.calcsize(self.header_fmt)
 
-        self.reset()
+        self.unpack_done = False
+
+        for k, v in self.header_attrs.items():
+            setattr(self, k, v[1])
+        self.body = ''
+
         if init_data and isinstance(init_data, dict):
             for k, v in init_data.items():
                 setattr(self, k, v)
@@ -75,14 +80,6 @@ class Box(object):
     def packet_len(self, value):
         # 什么也不需要做，因为不能让别人来赋值
         pass
-
-    def reset(self):
-        self.unpack_done = False
-
-        for k, v in self.header_attrs.items():
-            setattr(self, k, v[1])
-
-        self.body = ''
 
     def pack(self):
         """
