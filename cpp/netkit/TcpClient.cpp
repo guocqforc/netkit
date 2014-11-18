@@ -3,6 +3,7 @@
 // Copyright (c) 2014 dantezhu. All rights reserved.
 //
 
+#include <string.h>
 #if defined(_WIN32) || (defined(CC_TARGET_PLATFORM) && CC_TARGET_PLATFORM==CC_PLATFORM_WIN32)
 
 #include <winsock2.h>
