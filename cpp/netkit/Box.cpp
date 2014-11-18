@@ -139,7 +139,7 @@ const std::string& Box::getStringBody() {
 
 void Box::setBody(const char* p_body, int body_len) {
     if (!p_body) {
-        this->_body = "";
+        this->_body.resize(0);
         return;
     }
 
