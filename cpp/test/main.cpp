@@ -146,7 +146,7 @@ int test_box_stream() {
     netkit::TcpClient client(host, port, 5);
 
     int ret;
-    ret = client.connectServer();
+    ret = client.connect();
     if (ret < 0) {
         printf("connect fail, ret:%d", ret);
         return -1;
