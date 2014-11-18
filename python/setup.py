@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 setup(
     name="netkit",
-    version="0.2.110",
+    version="0.2.111",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     install_requires=[],
     scripts=[],
