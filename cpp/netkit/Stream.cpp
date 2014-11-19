@@ -134,14 +134,14 @@ void Stream::shutdown(int how) {
 }
 
 void Stream::close() {
-    if (m_sockFd > 0) {
+    if (m_sockFd >= 0) {
         CLOSE_SOCKET(m_sockFd);
-        m_sockFd = 0;
+        m_sockFd = -1;
     }
 }
 
 bool Stream::isClosed() {
-    return m_sockFd <= 0;
+    return m_sockFd < 0;
 }
 
 }
