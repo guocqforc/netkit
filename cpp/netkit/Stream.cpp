@@ -105,8 +105,8 @@ int Stream::write(IBox* box) {
 
     std::string str;
 
-    int packetLen = box->pack(str);
-    if (packetLen < 0) {
+    int len = box->pack(str);
+    if (len < 0) {
         return -2;
     }
 
