@@ -34,14 +34,14 @@ void test_box() {
 
     printf("box1: %s\n", box1.toString().c_str());
 
-    char* buf = new char[box1.packetLen()];
-    int ret = box1.pack(buf, box1.packetLen());
+    std::string strBuf;
+    int ret = box1.pack(strBuf);
 
     printf("box1 pack ret: %d\n", ret);
 
     netkit::Box box2;
 
-    ret = box2.unpack(buf, box1.packetLen());
+    ret = box2.unpack(strBuf.c_str(), strBuf.size());
 
     printf("box2 unpack ret: %d, %s\n", ret, box2.toString().c_str());
 
@@ -54,14 +54,14 @@ void test_line_box() {
 
     printf("box1: %s\n", box1.toString().c_str());
 
-    char* buf = new char[box1.packetLen()];
-    int ret = box1.pack(buf, box1.packetLen());
+    std::string strBuf;
+    int ret = box1.pack(strBuf);
 
     printf("box1 pack ret: %d\n", ret);
 
     netkit::LineBox box2;
 
-    ret = box2.unpack(buf, box1.packetLen());
+    ret = box2.unpack(strBuf.c_str(), strBuf.size());
 
     printf("box2 unpack ret: %d, %s\n", ret, box2.toString().c_str());
 }

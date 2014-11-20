@@ -17,15 +17,11 @@ public:
     virtual ~IBox(){}
     // >=0: buf的长度
     // <0:  报错
-    virtual int pack(char* buf, int maxsize)=0;
-
     virtual int pack(std::string& str)=0;
 
     virtual int unpack(const char* buf, int length)=0;
 
     virtual int check(const char* buf, int length)=0;
-
-    virtual int packetLen()=0;
 
     virtual std::string toString()=0;
 };

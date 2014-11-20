@@ -29,15 +29,11 @@ public:
     LineBox();
     virtual ~LineBox();
 
-    virtual int pack(char* buf, int maxsize);
-
     virtual int pack(std::string& str);
 
     virtual int unpack(const char* buf, int length);
 
     virtual int check(const char* buf, int length);
-
-    virtual int packetLen();
 
     const char* getBody();
     const std::string& getStringBody();
@@ -46,6 +42,7 @@ public:
 
     int headerLen();
     int bodyLen();
+    int packetLen();
 
     bool unpackDone();
     std::string toString();

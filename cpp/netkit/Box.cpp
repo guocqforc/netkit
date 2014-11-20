@@ -30,11 +30,10 @@ Box::Box() {
 
 Box::~Box() {}
 
-int Box::pack(char* buf, int maxsize) {
-    if (maxsize < this->packetLen()) {
-        // 说明包长都不够
-        return -1;
-    }
+int Box::pack(std::string& str) {
+    str.resize(this->packetLen());
+
+    char* buf = (char*)str.c_str();
 
     int temp;
 
@@ -60,12 +59,6 @@ int Box::pack(char* buf, int maxsize) {
     buf += this->bodyLen();
 
     return this->packetLen();
-}
-
-int Box::pack(std::string& str) {
-    str.resize(this->packetLen());
-
-    return pack((char*) str.c_str(), str.size());
 }
 
 int Box::unpack(const char* buf, int length) {

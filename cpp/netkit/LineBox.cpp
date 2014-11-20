@@ -15,20 +15,14 @@ LineBox::LineBox() {
 
 LineBox::~LineBox() {}
 
-int LineBox::pack(char* buf, int maxsize) {
-    if (maxsize < this->packetLen()) {
-        return -1;
-    }
+int LineBox::pack(std::string& str) {
+    str.resize(this->packetLen());
+
+    char* buf = (char*)str.c_str();
 
     memcpy(buf, this->getBody(), this->bodyLen());
 
     return this->packetLen();
-}
-
-int LineBox::pack(std::string& str) {
-    str.resize(this->packetLen());
-
-    return pack((char*) str.c_str(), str.size());
 }
 
 int LineBox::unpack(const char* buf, int length) {
