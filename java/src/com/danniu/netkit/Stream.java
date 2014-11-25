@@ -28,6 +28,10 @@ public class Stream {
         this.socket = socket;
     }
 
+    public setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
     public boolean read(IBox box) throws IOException {
         if (this.isClosed()) {
             return false;
