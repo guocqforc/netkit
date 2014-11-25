@@ -36,11 +36,11 @@ int Box::pack(std::string& str) {
 
     char* buf = (char*)str.c_str();
 
-    int temp;
+    int i_temp;
     short s_temp;
 
-    temp = htonl(this->magic);
-    box_mcp(buf, temp);
+    i_temp = htonl(this->magic);
+    box_mcp(buf, i_temp);
 
     s_temp = htons(this->version);
     box_mcp(buf, s_temp);
@@ -48,17 +48,17 @@ int Box::pack(std::string& str) {
     s_temp = htons(this->flag);
     box_mcp(buf, s_temp);
 
-    temp = htonl(this->packetLen());
-    box_mcp(buf, temp);
+    i_temp = htonl(this->packetLen());
+    box_mcp(buf, i_temp);
 
-    temp = htonl(this->cmd);
-    box_mcp(buf, temp);
+    i_temp = htonl(this->cmd);
+    box_mcp(buf, i_temp);
 
-    temp = htonl(this->ret);
-    box_mcp(buf, temp);
+    i_temp = htonl(this->ret);
+    box_mcp(buf, i_temp);
 
-    temp = htonl(this->sn);
-    box_mcp(buf, temp);
+    i_temp = htonl(this->sn);
+    box_mcp(buf, i_temp);
 
     memcpy(buf, this->getBody(), this->bodyLen());
     buf += this->bodyLen();
