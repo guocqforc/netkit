@@ -92,15 +92,14 @@ public class Stream {
         return this.socket == null;
     }
 
-    public void shutdownInput() throws IOException {
+    public void shutdown(int how) throws IOException {
         if (this.socket != null) {
-            this.socket.shutdownInput();
-        }
-    }
-
-    public void shutdownOutput() throws IOException {
-        if (this.socket != null) {
-            this.socket.shutdownOutput();
+            if (how == 0 || how == 2) {
+                this.socket.shutdownInput();
+            }
+            if (how == 1 || how == 2) {
+                this.socket.shutdownOutput();
+            }
         }
     }
 }
