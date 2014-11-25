@@ -154,6 +154,7 @@ int test_box_stream() {
 
     netkit::Box box1;
     box1.version = 10;
+    box1.flag = 0x9f;
     box1.cmd = 1;
     box1.setBody("woaini", 6);
     ret = client.write(&box1);

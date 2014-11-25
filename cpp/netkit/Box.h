@@ -18,7 +18,8 @@ public:
 
     // 默认就用这个值
     int magic;
-    int version;
+    short version;
+    short flag;
     // 这个只用来在网络上传输，放在这里是怕忘记了
     int _transfer_packet_len;
     int cmd;

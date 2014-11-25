@@ -29,6 +29,8 @@ def index(request):
     # request.write(box.pack())
     # return
 
+    box.version = 219
+    box.flag = 199
     buf = box.pack()
     print '1'
     request.write(buf[:10])

@@ -21,7 +21,8 @@ public class Box implements IBox {
 
     // 默认就用这个值
     public int magic = MAGIC;
-    public int version;
+    public short version;
+    public short flag;
     // 这个只用来在网络上传输，放在这里是怕忘记了
     private int _transfer_packet_len;
     public int cmd;
@@ -42,7 +43,8 @@ public class Box implements IBox {
 
         try{
             outputStream.writeInt(magic);
-            outputStream.writeInt(version);
+            outputStream.writeShort(version);
+            outputStream.writeShort(flag);
             outputStream.writeInt(packetLen());
             outputStream.writeInt(cmd);
             outputStream.writeInt(ret);
@@ -87,7 +89,8 @@ public class Box implements IBox {
         DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(buf, offset, length));
 
         int _magic;
-        int _version;
+        short _version;
+        short _flag;
         int _packet_len;
         int _cmd;
         int _ret;
@@ -97,7 +100,8 @@ public class Box implements IBox {
 
         try {
             _magic = inputStream.readInt();
-            _version = inputStream.readInt();
+            _version = inputStream.readShort();
+            _flag = inputStream.readShort();
             _packet_len = inputStream.readInt();
             _cmd = inputStream.readInt();
             _ret = inputStream.readInt();
@@ -142,6 +146,7 @@ public class Box implements IBox {
 
         this.magic = _magic;
         this.version = _version;
+        this.flag = _flag;
         this._transfer_packet_len = _packet_len;
         this.cmd = _cmd;
         this.ret = _ret;
@@ -164,8 +169,7 @@ public class Box implements IBox {
     }
 
     public int headerLen() {
-        // 6个int
-        return 4 * 6;
+        return 4 * 5 + 2 * 2;
     }
 
     public int bodyLen() {
@@ -204,6 +208,7 @@ public class Box implements IBox {
         String out = "";
         out += "magic: " + magic;
         out += ", version: " + version;
+        out += ", flag: " + flag;
         out += ", packetLen: " + packetLen();
         out += ", cmd: " + cmd;
         out += ", ret: " + ret;
