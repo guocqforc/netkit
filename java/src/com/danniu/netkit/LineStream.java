@@ -72,15 +72,22 @@ public class LineStream {
         return this.socket == null;
     }
 
-    public void shutdownInput() throws IOException {
+    public void shutdown(int how) {
         if (this.socket != null) {
-            this.socket.shutdownInput();
-        }
-    }
-
-    public void shutdownOutput() throws IOException {
-        if (this.socket != null) {
-            this.socket.shutdownOutput();
+            if (how == 0 || how == 2) {
+                try {
+                    this.socket.shutdownInput();
+                }
+                catch (IOException e) {
+                }
+            }
+            if (how == 1 || how == 2) {
+                try {
+                    this.socket.shutdownOutput();
+                }
+                catch (IOException e) {
+                }
+            }
         }
     }
 }
