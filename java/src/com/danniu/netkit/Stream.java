@@ -28,7 +28,7 @@ public class Stream {
         this.socket = socket;
     }
 
-    public setSocket(Socket socket) {
+    public void setSocket(Socket socket) {
         this.socket = socket;
     }
 
