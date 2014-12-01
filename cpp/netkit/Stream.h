@@ -29,6 +29,7 @@ class Stream {
 public:
     // 初始化时分配的buf大小
     static const int INIT_READ_BUFFER_SIZE = 4 * 1024;
+    static const int READ_BUFFER_MAXSIZE = -1;
     static const int RET_RECV_TIMEOUT = -100;
 
 private:

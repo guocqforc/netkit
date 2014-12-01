@@ -24,18 +24,17 @@ void Stream::_init(SocketType sockFd, int initReadBufferSize, int readBufferMaxs
     m_bufferedLength = 0;
     m_sockFd = sockFd;
 
-    initReadBufferSize = initReadBufferSize > 0 ? initReadBufferSize : INIT_READ_BUFFER_SIZE;
     m_readBuffer.resize(initReadBufferSize);
 
     m_readBufferMaxsize = readBufferMaxsize;
 }
 
 Stream::Stream(SocketType sockFd) {
-    _init(sockFd, 0, -1);
+    _init(sockFd, INIT_READ_BUFFER_SIZE, READ_BUFFER_MAXSIZE);
 }
 
 Stream::Stream(SocketType sockFd, int initReadBufferSize) {
-    _init(sockFd, initReadBufferSize, -1);
+    _init(sockFd, initReadBufferSize, READ_BUFFER_MAXSIZE);
 }
 
 Stream::Stream(SocketType sockFd, int initReadBufferSize, int readBufferMaxsize) {
