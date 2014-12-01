@@ -7,24 +7,33 @@ import java.net.Socket;
 public class Stream {
 
     private final static int READ_CHUNK_SIZE = 4 * 1024;
+    private final static int READ_BUFFER_MAXSIZE = -1;
 
     private Socket socket = null;
 
     private byte[] readChunkBuffer = null;
+    private int readBufferMaxsize;
 
     private ByteArrayOutputStream readBufferOutputStream;
 
     public Stream(Socket socket) {
-        this(socket, 0);
+        this(socket, READ_CHUNK_SIZE, READ_BUFFER_MAXSIZE);
     }
 
     public Stream(Socket socket, int readChunkSize) {
+        this(socket, readChunkSize, READ_BUFFER_MAXSIZE);
+    }
+
+    public Stream(Socket socket, int readChunkSize, int readBufferMaxsize) {
         readBufferOutputStream = new ByteArrayOutputStream();
 
         readChunkSize = readChunkSize > 0 ? readChunkSize : READ_CHUNK_SIZE;
 
         // readChunkSize 一次性读取的大小
         readChunkBuffer = new byte[readChunkSize];
+
+        this.readBufferMaxsize = readBufferMaxsize;
+
         this.socket = socket;
     }
 
@@ -40,6 +49,11 @@ public class Stream {
         // 直接只支持
         while(true) {
             byte[] tmpBuffer = readBufferOutputStream.toByteArray();
+
+            if (readBufferMaxsize >=0 && tmpBuffer.length > readBufferMaxsize) {
+                return false;
+            }
+
             if (tmpBuffer.length > 0) {
                 // 说明还是可以尝试一下的
 
