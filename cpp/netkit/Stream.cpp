@@ -20,20 +20,26 @@
 
 namespace netkit {
 
-void Stream::_init(SocketType sockFd, int initReadBufferSize) {
+void Stream::_init(SocketType sockFd, int initReadBufferSize, int readBufferMaxsize) {
     m_bufferedLength = 0;
     m_sockFd = sockFd;
 
     initReadBufferSize = initReadBufferSize > 0 ? initReadBufferSize : INIT_READ_BUFFER_SIZE;
     m_readBuffer.resize(initReadBufferSize);
+
+    m_readBufferMaxsize = readBufferMaxsize;
 }
 
 Stream::Stream(SocketType sockFd) {
-    _init(sockFd, 0);
+    _init(sockFd, 0, -1);
 }
 
 Stream::Stream(SocketType sockFd, int initReadBufferSize) {
-    _init(sockFd, initReadBufferSize);
+    _init(sockFd, initReadBufferSize, -1);
+}
+
+Stream::Stream(SocketType sockFd, int initReadBufferSize, int readBufferMaxsize) {
+    _init(sockFd, initReadBufferSize, readBufferMaxsize);
 }
 
 Stream::~Stream() {}
@@ -72,10 +78,22 @@ int Stream::read(IBox* box) {
             }
         }
 
-        if (m_readBuffer.size() <= m_bufferedLength) {
+        // 放在unpack后面，给unpack一次机会
+        if (m_readBufferMaxsize >= 0 && m_readBuffer.size() > m_readBufferMaxsize) {
+            // 长度超限
+            return -4;
+        }
+
+        if (m_bufferedLength >= m_readBuffer.size()) {
             // 已经没有多余的空间来储存了
             // 每次以翻倍处理
-            m_readBuffer.resize(m_readBuffer.size()*2);
+            int newSize = m_bufferedLength * 2;
+            if (m_readBufferMaxsize >= 0) {
+                // +1 是有原因的，否则会再进入循环一次
+                newSize = newSize > m_readBufferMaxsize+1 ? m_readBufferMaxsize + 1 : newSize;
+            }
+
+            m_readBuffer.resize(newSize);
         }
 
         int len = ::recv(m_sockFd, (char*)m_readBuffer.c_str() + m_bufferedLength, m_readBuffer.size() - m_bufferedLength, 0);

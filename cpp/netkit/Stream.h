@@ -35,14 +35,16 @@ private:
     int m_sockFd;
     // 实际长度
     int m_bufferedLength;
+    int m_readBufferMaxsize;
     std::string m_readBuffer;
 
 private:
-    void _init(SocketType sockFd, int initReadBufferSize);
+    void _init(SocketType sockFd, int initReadBufferSize, int readBufferMaxsize);
 
 public:
     Stream(SocketType sockFd);
     Stream(SocketType sockFd, int initReadBufferSize);
+    Stream(SocketType sockFd, int initReadBufferSize, int readBufferMaxsize);
     virtual ~Stream();
 
     void setSockFd(SocketType sockFd);
