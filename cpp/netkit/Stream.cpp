@@ -88,7 +88,7 @@ int Stream::read(IBox* box) {
             int newSize = m_bufferedLength * 2;
             if (m_readBufferMaxsize >= 0) {
                 // +1 是有原因的，否则会再进入循环一次
-                newSize = newSize > m_readBufferMaxsize+1 ? m_readBufferMaxsize + 1 : newSize;
+                newSize = newSize > m_readBufferMaxsize + 1 ? m_readBufferMaxsize + 1 : newSize;
             }
 
             m_readBuffer.resize(newSize);
