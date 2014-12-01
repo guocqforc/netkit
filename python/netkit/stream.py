@@ -228,6 +228,9 @@ class Stream(object):
     def write_to_fd(self, data):
         try:
             return self.sock.send(data)
+        except socket.timeout, e:
+            # 和recv共享超时
+            raise e
         except KeyboardInterrupt, e:
             # 中断
             raise e
