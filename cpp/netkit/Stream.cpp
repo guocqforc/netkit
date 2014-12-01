@@ -58,6 +58,11 @@ int Stream::read(IBox* box) {
 
     // 直接只支持
     while(true) {
+        if (m_readBufferMaxsize >= 0 && m_bufferedLength > m_readBufferMaxsize) {
+            // 长度超限
+            return -10;
+        }
+
         if (m_bufferedLength > 0) {
             // 说明还是可以尝试一下的
 
@@ -75,12 +80,6 @@ int Stream::read(IBox* box) {
                 // 说明数据错乱了
                 m_bufferedLength = 0;
             }
-        }
-
-        // 放在unpack后面，给unpack一次机会
-        if (m_readBufferMaxsize >= 0 && m_readBuffer.size() > m_readBufferMaxsize) {
-            // 长度超限
-            return -4;
         }
 
         if (m_bufferedLength >= m_readBuffer.size()) {
