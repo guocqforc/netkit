@@ -28,24 +28,24 @@ typedef int SocketType;
 class Stream {
 public:
     // 初始化时分配的buf大小
-    static const int INIT_READ_BUFFER_SIZE = 4 * 1024;
-    static const int READ_BUFFER_MAXSIZE = -1;
+    static const int READ_BUFFER_INIT_SIZE = 4 * 1024;
+    static const int READ_BUFFER_MAX_SIZE = -1;
     static const int RET_RECV_TIMEOUT = -100;
 
 private:
     int m_sockFd;
     // 实际长度
     int m_bufferedLength;
-    int m_readBufferMaxsize;
+    int m_readBufferMaxSize;
     std::string m_readBuffer;
 
 private:
-    void _init(SocketType sockFd, int initReadBufferSize, int readBufferMaxsize);
+    void _init(SocketType sockFd, int readBufferInitSize, int readBufferMaxSize);
 
 public:
     Stream(SocketType sockFd);
-    Stream(SocketType sockFd, int initReadBufferSize);
-    Stream(SocketType sockFd, int initReadBufferSize, int readBufferMaxsize);
+    Stream(SocketType sockFd, int readBufferInitSize);
+    Stream(SocketType sockFd, int readBufferInitSize, int readBufferMaxSize);
     virtual ~Stream();
 
     void setSockFd(SocketType sockFd);

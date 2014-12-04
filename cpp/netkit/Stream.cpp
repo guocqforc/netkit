@@ -20,25 +20,25 @@
 
 namespace netkit {
 
-void Stream::_init(SocketType sockFd, int initReadBufferSize, int readBufferMaxsize) {
+void Stream::_init(SocketType sockFd, int readBufferInitSize, int readBufferMaxSize) {
     m_bufferedLength = 0;
     m_sockFd = sockFd;
 
-    m_readBuffer.resize(initReadBufferSize);
+    m_readBuffer.resize(readBufferInitSize);
 
-    m_readBufferMaxsize = readBufferMaxsize;
+    m_readBufferMaxSize = readBufferMaxSize;
 }
 
 Stream::Stream(SocketType sockFd) {
-    _init(sockFd, INIT_READ_BUFFER_SIZE, READ_BUFFER_MAXSIZE);
+    _init(sockFd, READ_BUFFER_INIT_SIZE, READ_BUFFER_MAX_SIZE);
 }
 
-Stream::Stream(SocketType sockFd, int initReadBufferSize) {
-    _init(sockFd, initReadBufferSize, READ_BUFFER_MAXSIZE);
+Stream::Stream(SocketType sockFd, int readBufferInitSize) {
+    _init(sockFd, readBufferInitSize, READ_BUFFER_MAX_SIZE);
 }
 
-Stream::Stream(SocketType sockFd, int initReadBufferSize, int readBufferMaxsize) {
-    _init(sockFd, initReadBufferSize, readBufferMaxsize);
+Stream::Stream(SocketType sockFd, int readBufferInitSize, int readBufferMaxSize) {
+    _init(sockFd, readBufferInitSize, readBufferMaxSize);
 }
 
 Stream::~Stream() {}
@@ -58,7 +58,7 @@ int Stream::read(IBox* box) {
 
     // 直接只支持
     while(true) {
-        if (m_readBufferMaxsize >= 0 && m_bufferedLength > m_readBufferMaxsize) {
+        if (m_readBufferMaxSize >= 0 && m_bufferedLength > m_readBufferMaxSize) {
             // 长度超限
             return -10;
         }
@@ -86,9 +86,9 @@ int Stream::read(IBox* box) {
             // 已经没有多余的空间来储存了
             // 每次以翻倍处理
             int newSize = m_bufferedLength * 2;
-            if (m_readBufferMaxsize >= 0) {
+            if (m_readBufferMaxSize >= 0) {
                 // +1 是有原因的，否则会再进入循环一次
-                newSize = newSize > m_readBufferMaxsize + 1 ? m_readBufferMaxsize + 1 : newSize;
+                newSize = newSize > m_readBufferMaxSize + 1 ? m_readBufferMaxSize + 1 : newSize;
             }
 
             m_readBuffer.resize(newSize);
