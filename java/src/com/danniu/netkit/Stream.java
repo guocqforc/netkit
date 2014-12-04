@@ -7,24 +7,24 @@ import java.net.Socket;
 public class Stream {
 
     private final static int READ_CHUNK_SIZE = 4 * 1024;
-    private final static int READ_BUFFER_MAXSIZE = -1;
+    private final static int READ_BUFFER_MAX_SIZE = -1;
 
     private Socket socket = null;
 
     private byte[] readChunkBuffer = null;
-    private int readBufferMaxsize;
+    private int readBufferMaxSize;
 
     private ByteArrayOutputStream readBufferOutputStream;
 
     public Stream(Socket socket) {
-        this(socket, READ_CHUNK_SIZE, READ_BUFFER_MAXSIZE);
+        this(socket, READ_CHUNK_SIZE, READ_BUFFER_MAX_SIZE);
     }
 
     public Stream(Socket socket, int readChunkSize) {
-        this(socket, readChunkSize, READ_BUFFER_MAXSIZE);
+        this(socket, readChunkSize, READ_BUFFER_MAX_SIZE);
     }
 
-    public Stream(Socket socket, int readChunkSize, int readBufferMaxsize) {
+    public Stream(Socket socket, int readChunkSize, int readBufferMaxSize) {
         readBufferOutputStream = new ByteArrayOutputStream();
 
         readChunkSize = readChunkSize > 0 ? readChunkSize : READ_CHUNK_SIZE;
@@ -32,7 +32,7 @@ public class Stream {
         // readChunkSize 一次性读取的大小
         readChunkBuffer = new byte[readChunkSize];
 
-        this.readBufferMaxsize = readBufferMaxsize;
+        this.readBufferMaxSize = readBufferMaxSize;
 
         this.socket = socket;
     }
@@ -50,7 +50,7 @@ public class Stream {
         while(true) {
             byte[] tmpBuffer = readBufferOutputStream.toByteArray();
 
-            if (readBufferMaxsize >=0 && tmpBuffer.length > readBufferMaxsize) {
+            if (readBufferMaxSize >=0 && tmpBuffer.length > readBufferMaxSize) {
                 return false;
             }
 
