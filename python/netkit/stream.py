@@ -219,7 +219,9 @@ class Stream(object):
                 # 中断，返回空字符串，但不断掉连接
                 return ''
             else:
-                raise e
+                logger.error('exc occur.', exc_info=True)
+                self.close()
+                return None
         except KeyboardInterrupt, e:
             # 中断
             raise e
