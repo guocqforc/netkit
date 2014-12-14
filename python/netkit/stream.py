@@ -5,6 +5,7 @@ import functools
 import numbers
 import collections
 import re
+import errno
 from .log import logger
 
 READ_CHUNK_SIZE = 4096
@@ -203,7 +204,9 @@ class Stream(object):
     def read_from_fd(self):
         """
         从fd里读取数据。
-        超时不捕获异常，由外面捕获。其他错误则直接关闭连接
+        超时不捕获异常，由外面捕获。
+        中断也不应该关闭链接，比如kill -USR1 会抛出中断异常
+        其他错误则直接关闭连接
         :return:
         """
         try:
@@ -211,6 +214,12 @@ class Stream(object):
         except socket.timeout, e:
             # 服务器是不会recv超时的
             raise e
+        except socket.error, e:
+            if e.errno == errno.EINTR:
+                # 中断，返回空字符串，但不断掉连接
+                return ''
+            else:
+                raise e
         except KeyboardInterrupt, e:
             # 中断
             raise e
@@ -268,7 +277,7 @@ class Stream(object):
         if data:
             return 0, data
 
-        if self._read_to_buffer() == 0:
+        if self._read_to_buffer() is None:
             # 说明断连接了
             self.close()
 
@@ -290,13 +299,13 @@ class Stream(object):
     def _read_to_buffer(self):
         """Reads from the socket and appends the result to the read buffer.
 
-        Returns the number of bytes read.  Returns 0 is remote closed.  On
+        Returns the number of bytes read.  Returns None is remote closed.  On
         error closes the socket and raises an exception.
         """
         chunk = self.read_from_fd()
 
         if chunk is None:
-            return 0
+            return None
 
         self._read_buffer.append(chunk)
         self._read_buffer_size += len(chunk)
