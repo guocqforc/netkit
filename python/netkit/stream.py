@@ -289,11 +289,6 @@ class Stream(object):
             # 直接返回，因为buffer里面一定没数据了
             return -1, None
 
-        data = self._read_from_buffer()
-        if data:
-            # 收到了新的数据，判断下是否满足要求
-            return 0, data
-
         return 1, None
 
     def _read_to_buffer(self):
