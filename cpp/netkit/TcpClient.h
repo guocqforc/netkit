@@ -17,7 +17,7 @@ namespace netkit {
 class TcpClient {
 public:
     // timeout <=0 代表永不超时
-    TcpClient(const std::string &host, short port, double timeout);
+    TcpClient(const std::string &host, int port, double timeout);
     virtual ~TcpClient();
 
     int connect();
@@ -38,7 +38,7 @@ public:
 
 private:
     std::string m_host;
-    short m_port;
+    int m_port;
     double m_timeout;
 
     Stream *m_stream;

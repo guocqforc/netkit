@@ -20,7 +20,7 @@
 
 namespace netkit {
 
-TcpClient::TcpClient(const std::string &host, short port, double timeout) {
+TcpClient::TcpClient(const std::string &host, int port, double timeout) {
     m_host = host;
     m_port = port;
     m_timeout = timeout;
@@ -42,7 +42,7 @@ int TcpClient::connect() {
 
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port   = htons(m_port);
+    serv_addr.sin_port   = htons((unsigned short)m_port);
     serv_addr.sin_addr = ip_addr;
 
     SocketType sockFd;
