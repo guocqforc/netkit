@@ -80,3 +80,6 @@ class TcpClient(object):
             return True
 
         return self.stream.closed()
+
+    def __str__(self):
+        return 'box_class: %s, host: %s, port: %s, timeout: %s' % (self.box_class, self.host, self.port, self.timeout)
