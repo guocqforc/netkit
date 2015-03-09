@@ -66,6 +66,8 @@ class TcpClient(object):
 
         if isinstance(data, self.box_class):
             data = data.pack()
+        elif isinstance(data, dict):
+            data = self.box_class(data).pack()
 
         return self.stream.write(data)
 
