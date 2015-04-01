@@ -1,4 +1,4 @@
-package com.danniu.netkit;
+package cn.vimer.netkit;
 
 /**
  * Created by dantezhu on 14-7-3.

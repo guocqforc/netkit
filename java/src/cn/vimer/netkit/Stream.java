@@ -1,4 +1,4 @@
-package com.danniu.netkit;
+package cn.vimer.netkit;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

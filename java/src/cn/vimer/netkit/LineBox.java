@@ -1,4 +1,4 @@
-package com.danniu.netkit;
+package cn.vimer.netkit;
 
 import org.json.JSONException;
 import org.json.JSONObject;
