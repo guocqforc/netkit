@@ -111,20 +111,31 @@ public class Stream {
     }
 
     public void shutdown(int how) {
-        if (this.socket != null) {
-            if (how == 0 || how == 2) {
-                try {
+        // 要到用的时候才判断是否空指针
+        // 比如在ferry中，disconnect是通过shutdown实现的，就会触发其另一个线程的close函数
+        if (how == 0 || how == 2) {
+            try {
+                if (this.socket != null) {
                     this.socket.shutdownInput();
                 }
-                catch (IOException e) {
-                }
             }
-            if (how == 1 || how == 2) {
-                try {
+            catch (IOException e) {
+            }
+            catch (Exception e) {
+                // 由于跨线程，可能报空指针错误
+            }
+        }
+
+        if (how == 1 || how == 2) {
+            try {
+                if (this.socket != null) {
                     this.socket.shutdownOutput();
                 }
-                catch (IOException e) {
-                }
+            }
+            catch (IOException e) {
+            }
+            catch (Exception e) {
+                // 由于跨线程，可能报空指针错误
             }
         }
     }
