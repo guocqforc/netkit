@@ -218,11 +218,10 @@ class Stream(object):
             if e.errno == errno.EINTR:
                 # 中断，返回空字符串，但不断掉连接
                 return ''
-            elif e.errno == errno.ECONNRESET:
-                # Connection reset by peer 对端非正常关闭连接，比如对端程序异常退出之类
-                self.close()
-                return None
             else:
+                # Connection reset by peer 的原因说明:
+                # 网上说是对端非正常关闭连接，比如对端程序异常退出之类
+                # 我重现的方法是: C向S发送数据，如果S有回应，而C没有读取，C就调用close或者被析构的话
                 logger.error('exc occur.', exc_info=True)
                 self.close()
                 return None
