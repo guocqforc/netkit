@@ -218,6 +218,10 @@ class Stream(object):
             if e.errno == errno.EINTR:
                 # 中断，返回空字符串，但不断掉连接
                 return ''
+            elif e.errno == errno.ECONNRESET:
+                # Connection reset by peer 对端非正常关闭连接，比如对端程序异常退出之类
+                self.close()
+                return None
             else:
                 logger.error('exc occur.', exc_info=True)
                 self.close()
