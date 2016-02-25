@@ -149,7 +149,7 @@ class Box(object):
         验证包头合法性
         :return:
         """
-        right_magic = getattr(self.header_attrs, 'magic', None)
+        right_magic = self.header_attrs['magic'][1] if 'magic' in self.header_attrs else None
 
         if right_magic is not None:
             magic = dict_values.get('magic')
