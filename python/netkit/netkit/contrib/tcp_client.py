@@ -11,15 +11,20 @@ class TcpClient(object):
 
     box_class = None
     stream_checker = None
-    host = None
-    port = None
+    address = None
+    socket_type = None
     timeout = None
     stream = None
 
-    def __init__(self, box_class, host, port, timeout=None):
+    def __init__(self, box_class, host=None, port=None, timeout=None, address=None, socket_type=None):
         self.box_class = box_class
-        self.host = host
-        self.port = port
+        self.address = (host, port)
+
+        if address is not None:
+            self.address = address
+
+        self.socket_type = socket_type if socket_type is not None else socket.AF_INET
+
         self.timeout = timeout
         self.stream_checker = self.box_class().check
 
@@ -28,10 +33,10 @@ class TcpClient(object):
         连接服务器，失败会抛出异常
         :return:
         """
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock = socket.socket(self.socket_type, socket.SOCK_STREAM)
         sock.settimeout(self.timeout)
         try:
-            sock.connect((self.host, self.port))
+            sock.connect(self.address)
         except Exception, e:
             sock.close()
             raise e
@@ -84,4 +89,4 @@ class TcpClient(object):
         return self.stream.closed()
 
     def __str__(self):
-        return 'box_class: %s, host: %s, port: %s, timeout: %s' % (self.box_class, self.host, self.port, self.timeout)
+        return 'box_class: %s, address: %s, timeout: %s' % (self.box_class, self.address, self.timeout)
