@@ -40,7 +40,7 @@ class TcpClient(object):
         """
         if isinstance(self.address, (list, tuple)):
             socket_type = socket.AF_INET
-        elif isinstance(self.address, str):
+        elif isinstance(self.address, (str, unicode)):
             socket_type = socket.AF_UNIX
         else:
             raise Exception('invalid address: %s' % self.address)
