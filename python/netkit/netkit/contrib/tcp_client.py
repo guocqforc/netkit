@@ -16,6 +16,14 @@ class TcpClient(object):
     stream = None
 
     def __init__(self, box_class, host=None, port=None, timeout=None, address=None):
+        """
+        :param box_class:
+        :param host:
+        :param port:
+        :param timeout:
+        :param address: 优先级比host,port 更高。如果传入 list/tuple 代表是网络ip和端口；如果传入str，则代表是unix文件
+        :return:
+        """
         self.box_class = box_class
         self.address = (host, port)
 
