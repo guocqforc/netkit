@@ -12,18 +12,15 @@ class TcpClient(object):
     box_class = None
     stream_checker = None
     address = None
-    socket_type = None
     timeout = None
     stream = None
 
-    def __init__(self, box_class, host=None, port=None, timeout=None, address=None, socket_type=None):
+    def __init__(self, box_class, host=None, port=None, timeout=None, address=None):
         self.box_class = box_class
         self.address = (host, port)
 
         if address is not None:
             self.address = address
-
-        self.socket_type = socket_type if socket_type is not None else socket.AF_INET
 
         self.timeout = timeout
         self.stream_checker = self.box_class().check
@@ -33,7 +30,14 @@ class TcpClient(object):
         连接服务器，失败会抛出异常
         :return:
         """
-        sock = socket.socket(self.socket_type, socket.SOCK_STREAM)
+        if isinstance(self.address, (list, tuple)):
+            socket_type = socket.AF_INET
+        elif isinstance(self.address, str):
+            socket_type = socket.AF_UNIX
+        else:
+            raise Exception('invalid address: %s' % self.address)
+
+        sock = socket.socket(socket_type, socket.SOCK_STREAM)
         sock.settimeout(self.timeout)
         try:
             sock.connect(self.address)
