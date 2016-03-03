@@ -5,6 +5,7 @@ from reimp import logger, Box
 
 
 tcp_client = TcpClient(Box, address=('127.0.0.1', 7777))
+# tcp_client = TcpClient(Box, '127.0.0.1', 7777)
 
 tcp_client.connect()
 
