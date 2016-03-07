@@ -67,9 +67,6 @@ class TcpClient(object):
         if not data:
             return None
 
-        # 将原始数据赋值
-        box._raw_data = data
-
         return box
 
     def write(self, data):
