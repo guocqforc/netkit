@@ -10,7 +10,6 @@ class TcpClient(object):
     """
 
     box_class = None
-    stream_checker = None
     address = None
     timeout = None
     stream = None
@@ -31,7 +30,6 @@ class TcpClient(object):
             self.address = address
 
         self.timeout = timeout
-        self.stream_checker = self.box_class().check
 
     def connect(self):
         """
@@ -63,12 +61,11 @@ class TcpClient(object):
         if self.closed():
             return None
 
-        data = self.stream.read_with_checker(self.stream_checker)
+        box = self.box_class()
+
+        data = self.stream.read_with_checker(box.unpack)
         if not data:
             return None
-
-        box = self.box_class()
-        box.unpack(data)
 
         return box
 
