@@ -69,13 +69,11 @@ void test_line_box() {
 int get_connected_socket(std::string host, short port, netkit::SocketType& sockFd) {
 
     struct sockaddr_in serv_addr;
-    struct in_addr ip_addr;
-    ip_addr.s_addr = inet_addr(host.c_str());
 
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port   = htons(port);
-    serv_addr.sin_addr = ip_addr;
+    inet_aton(host.c_str(), (struct in_addr *) &serv_addr.sin_addr.s_addr);
 
 /*
 #if !(defined(_WIN32) || (defined(CC_TARGET_PLATFORM) && CC_TARGET_PLATFORM==CC_PLATFORM_WIN32))

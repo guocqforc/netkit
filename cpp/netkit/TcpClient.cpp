@@ -37,13 +37,11 @@ TcpClient::~TcpClient() {
 int TcpClient::connect() {
 
     struct sockaddr_in serv_addr;
-    struct in_addr ip_addr;
-    ip_addr.s_addr = inet_addr(m_host.c_str());
 
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port   = htons((unsigned short)m_port);
-    serv_addr.sin_addr = ip_addr;
+    inet_aton(m_host.c_str(), (struct in_addr *) &serv_addr.sin_addr.s_addr);
 
     SocketType sockFd;
 
