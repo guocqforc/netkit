@@ -215,8 +215,9 @@ class Stream(object):
             # 服务器是不会recv超时的
             raise e
         except socket.error, e:
-            if e.errno == errno.EINTR:
-                # 中断，返回空字符串，但不断掉连接
+            if e.errno in (errno.EINTR, errno.EAGAIN):
+                # 中断 或者 没有可读数据(非阻塞模式)
+                # 返回空字符串，但不断掉连接
                 return ''
             else:
                 # Connection reset by peer 的原因说明:
