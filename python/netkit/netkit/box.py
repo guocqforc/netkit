@@ -200,4 +200,4 @@ class Box(object):
 
         values.append(('body', self.body))
 
-        return repr(values)
+        return '<%s %r>' % (type(self).__name__, values)
