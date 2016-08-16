@@ -144,7 +144,7 @@ int test_box_stream() {
     
     int port = 7777;
 
-    netkit::TcpClient client(host, port, 5);
+    netkit::TcpClient client(host, port, 5.5);
 
     int ret;
     ret = client.connect();

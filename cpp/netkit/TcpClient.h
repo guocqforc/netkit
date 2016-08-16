@@ -14,11 +14,6 @@
 
 namespace netkit {
 
-enum ConnectRetCode {
-    CONNECT_RET_ERROR = 1,
-    CONNECT_RET_TIMEOUT,
-};
-
 class TcpClient {
 public:
     // timeout <=0 代表永不超时
