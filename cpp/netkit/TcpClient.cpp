@@ -59,7 +59,7 @@ int TcpClient::connect() {
     }
 
     if (m_timeout > 0) {
-        struct timeval tvTimeout={
+        struct timeval tvTimeout = {
                 (int)m_timeout,
                 (int)((m_timeout - (int)m_timeout) * 1000000)
         };
@@ -346,7 +346,7 @@ int TcpClient::_selectConnect(std::string host, int port, double timeout, netkit
 
             {
                 // 进行中，准备用select判断超时
-                struct timeval tvTimeout ={
+                struct timeval tvTimeout = {
                     (int)timeout,
                     (int)((timeout - (int)timeout) * 1000000)
                 };
