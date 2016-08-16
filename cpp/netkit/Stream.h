@@ -30,6 +30,7 @@ public:
     // 初始化时分配的buf大小
     static const int READ_BUFFER_INIT_SIZE = 4 * 1024;
     static const int READ_BUFFER_MAX_SIZE = -1;
+    // 连接/接收 超时
     static const int RET_RECV_TIMEOUT = -100;
 
 private:
