@@ -35,6 +35,38 @@ public:
 
     bool isClosed();
 
+private:
+
+    // 设置阻塞/非阻塞socket
+    void _setBlockSocket(netkit::SocketType sockFd, bool block);
+
+    // 通过FQDN创建socket。同时支持IPv4/IPv6
+    int _createUnitySocket(std::string host, int port, netkit::SocketType &resultSock, std::string &address);
+
+    // 创建IPv4 socket
+    int _createV4Socket(std::string host, int port, netkit::SocketType &resultSock, std::string &address);
+
+    // 创建IPv6 socket
+    int _createV6Socket(std::string host, int port, netkit::SocketType &resultSock, std::string &address);
+
+    // 自定义连接，内部可能使用以下3种连接
+    int _customConnect(std::string host, int port, double timeout,
+                       netkit::SocketType &resultSock);
+
+    // 同步连接
+    int _blockConnect(std::string host, int port,
+                       netkit::SocketType &resultSock);
+    
+    // 通过select异步连接
+    int _selectConnect(std::string host, int port, double timeout,
+                       netkit::SocketType &resultSock);
+
+#if !defined(_WIN32) && !(defined(CC_TARGET_PLATFORM) && CC_TARGET_PLATFORM==CC_PLATFORM_WIN32)
+    // 通过poll异步连接
+    int _pollConnect(std::string host, int port, double timeout,
+                       netkit::SocketType &resultSock);
+#endif
+
 
 private:
     std::string m_host;
