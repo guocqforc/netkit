@@ -59,12 +59,12 @@ int TcpClient::connect() {
     }
 
     if (m_timeout > 0) {
-        struct timeval timeout={
+        struct timeval tvTimeout={
                 (int)m_timeout,
                 (int)((m_timeout - (int)m_timeout) * 1000000)
         };
 
-        setsockopt(sockFd, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(timeout));
+        setsockopt(sockFd, SOL_SOCKET, SO_RCVTIMEO, (char*)&tvTimeout, sizeof(tvTimeout));
     }
 
     m_stream = new Stream(sockFd);
