@@ -4,17 +4,32 @@
 //
 
 #include <string.h>
+#include <fcntl.h>
+#include <sstream>
+
 #if defined(_WIN32) || (defined(CC_TARGET_PLATFORM) && CC_TARGET_PLATFORM==CC_PLATFORM_WIN32)
 
 #include <winsock2.h>
+// for addrinfo
+#include <ws2tcpip.h>
+#pragma comment(lib,"pthreadVSE2.lib")
+#define SOCKET_OPT_LEN_TYPE int
+// 不能用 char*，否则编译不过
+#define SOCKET_OPT_VAL_PTR_TYPE char
 
 #else
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
+
 #include <unistd.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+// for addrinfo
+#include <netdb.h>
+#include <poll.h>
+#define SOCKET_OPT_LEN_TYPE socklen_t
+#define SOCKET_OPT_VAL_PTR_TYPE void
 
 #endif
+
 
 #include "TcpClient.h"
 
@@ -478,5 +493,6 @@ int TcpClient::_pollConnect(std::string host, int port, double timeout, netkit::
     return connectResult;
 }
 
+#endif
 
 }
