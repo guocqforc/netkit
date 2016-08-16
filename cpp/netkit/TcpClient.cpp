@@ -383,7 +383,7 @@ int TcpClient::_selectConnect(std::string host, int port, double timeout, netkit
                 }
                 else if (ret == 0) {
                     // 超时了没返回
-                    connectResult = -100;
+                    connectResult = Stream::RET_RECV_TIMEOUT;
                 }
             }
         }
@@ -468,7 +468,7 @@ int TcpClient::_pollConnect(std::string host, int port, double timeout, netkit::
                 }
                 else if (ret == 0) {
                     // 超时了没返回
-                    connectResult = -100;
+                    connectResult = Stream::RET_RECV_TIMEOUT;
                 }
             }
         }
