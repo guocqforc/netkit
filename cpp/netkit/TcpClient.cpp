@@ -67,7 +67,12 @@ int TcpClient::connect() {
         setsockopt(sockFd, SOL_SOCKET, SO_RCVTIMEO, (char*)&tvTimeout, sizeof(tvTimeout));
     }
 
-    m_stream = new Stream(sockFd);
+    if (m_stream) {
+        m_stream->setSockFd(sockFd);
+    }
+    else {
+        m_stream = new Stream(sockFd);
+    }
 
     return 0;
 }
