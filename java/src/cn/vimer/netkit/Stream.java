@@ -16,6 +16,10 @@ public class Stream {
 
     private ByteArrayOutputStream readBufferOutputStream;
 
+    public Stream() {
+        this(null, READ_CHUNK_SIZE, READ_BUFFER_MAX_SIZE);
+    }
+
     public Stream(Socket socket) {
         this(socket, READ_CHUNK_SIZE, READ_BUFFER_MAX_SIZE);
     }
@@ -35,6 +39,10 @@ public class Stream {
         this.readBufferMaxSize = readBufferMaxSize;
 
         this.socket = socket;
+    }
+
+    public Socket getSocket() {
+        return this.socket;
     }
 
     public void setSocket(Socket socket) {

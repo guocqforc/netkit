@@ -9,11 +9,24 @@ public class LineStream {
     private BufferedReader bufferedReader = null;
     private BufferedWriter bufferedWriter = null;
 
+    public LineStream () {
+    }
+
     public LineStream(Socket socket) throws IOException {
+        this.setSocket(Socket);
+    }
+
+    public getSocket() {
+        return this.socket;
+    }
+
+    public setSocket(Socket socket) throws IOException {
         this.socket = socket;
 
-        bufferedReader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        bufferedWriter = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
+        if (this.socket != null) {
+            bufferedReader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
+        }
     }
 
     public String read() throws IOException {

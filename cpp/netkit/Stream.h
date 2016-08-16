@@ -44,11 +44,13 @@ private:
     void _init(SocketType sockFd, int readBufferInitSize, int readBufferMaxSize);
 
 public:
+    Stream();
     Stream(SocketType sockFd);
     Stream(SocketType sockFd, int readBufferInitSize);
     Stream(SocketType sockFd, int readBufferInitSize, int readBufferMaxSize);
     virtual ~Stream();
 
+    SocketType getSockFd();
     void setSockFd(SocketType sockFd);
 
     // 0 为成功

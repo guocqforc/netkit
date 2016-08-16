@@ -51,7 +51,7 @@ class Stream(object):
     reading = False
     writing = False
 
-    def __init__(self, sock, max_buffer_size=-1,
+    def __init__(self, sock=None, max_buffer_size=-1,
                  read_chunk_size=None, use_gevent=False, lock_mode=LOCK_MODE_RDWR):
         self.sock = sock
         self.max_buffer_size = max_buffer_size
