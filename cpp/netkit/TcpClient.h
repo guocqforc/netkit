@@ -14,9 +14,9 @@
 
 namespace netkit {
 
-enum RetCode {
-    RET_ERROR = 1,
-    RET_TIMEOUT,
+enum ConnectRetCode {
+    CONNECT_RET_ERROR = 1,
+    CONNECT_RET_TIMEOUT,
 };
 
 class TcpClient {

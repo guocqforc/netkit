@@ -66,7 +66,7 @@ void test_line_box() {
     printf("box2 unpack ret: %d, %s\n", ret, box2.toString().c_str());
 }
 
-int get_connected_socket(std::string host, short port, netkit::SocketType& sockFd) {
+int get_connected_socket(std::string host, int port, netkit::SocketType& sockFd) {
 
     struct sockaddr_in serv_addr;
 
@@ -93,7 +93,7 @@ int get_connected_socket(std::string host, short port, netkit::SocketType& sockF
     }
 
     int ret = connect(sockFd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
-    if (ret < 0) {
+    if (ret != 0) {
         printf("connect fail, ret:%d\n", ret);
         return -3;
     }
@@ -105,7 +105,7 @@ int get_connected_socket(std::string host, short port, netkit::SocketType& sockF
 int test_line_box_stream() {
 
     std::string host = "127.0.0.1";
-    short port = 7777;
+    int port = 7777;
 
     netkit::SocketType sockFd;
     int ret = get_connected_socket(host, port, sockFd);
@@ -138,15 +138,18 @@ int test_line_box_stream() {
 int test_box_stream() {
 
 
+    // 用来测试连接超时
+    // std::string host = "4.248.234.2";
     std::string host = "127.0.0.1";
-    short port = 7777;
+    
+    int port = 7777;
 
     netkit::TcpClient client(host, port, 5);
 
     int ret;
     ret = client.connect();
-    if (ret < 0) {
-        printf("connect fail, ret:%d", ret);
+    if (ret != 0) {
+        printf("connect fail, ret:%d\n", ret);
         return -1;
     }
 

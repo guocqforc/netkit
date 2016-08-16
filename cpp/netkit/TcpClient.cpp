@@ -273,7 +273,7 @@ int TcpClient::_customConnect(std::string host, int port, double timeout, netkit
 
 int TcpClient::_blockConnect(std::string host, int port, netkit::SocketType &resultSock) {
     // 默认就是ERROR
-    int connectResult = RET_ERROR;
+    int connectResult = CONNECT_RET_ERROR;
     std::string address;
     netkit::SocketType sockFd;
 
@@ -306,7 +306,7 @@ int TcpClient::_blockConnect(std::string host, int port, netkit::SocketType &res
 
 int TcpClient::_selectConnect(std::string host, int port, double timeout, netkit::SocketType &resultSock) {
     // 默认就是ERROR
-    int connectResult = RET_ERROR;
+    int connectResult = CONNECT_RET_ERROR;
     std::string address;
     netkit::SocketType sockFd;
 
@@ -383,7 +383,7 @@ int TcpClient::_selectConnect(std::string host, int port, double timeout, netkit
                 }
                 else if (ret == 0) {
                     // 超时了没返回
-                    connectResult = RET_TIMEOUT;
+                    connectResult = CONNECT_RET_TIMEOUT;
                 }
             }
         }
@@ -414,7 +414,7 @@ int TcpClient::_pollConnect(std::string host, int port, double timeout, netkit::
     // windows 下没有poll
 
     // 默认就是ERROR
-    int connectResult = RET_ERROR;
+    int connectResult = CONNECT_RET_ERROR;
     std::string address;
     netkit::SocketType sockFd;
 
@@ -468,7 +468,7 @@ int TcpClient::_pollConnect(std::string host, int port, double timeout, netkit::
                 }
                 else if (ret == 0) {
                     // 超时了没返回
-                    connectResult = RET_TIMEOUT;
+                    connectResult = CONNECT_RET_TIMEOUT;
                 }
             }
         }
