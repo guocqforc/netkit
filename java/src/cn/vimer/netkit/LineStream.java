@@ -13,7 +13,7 @@ public class LineStream {
     }
 
     public LineStream(Socket socket) throws IOException {
-        this.setSocket(Socket);
+        this.setSocket(socket);
     }
 
     public Socket getSocket() {
