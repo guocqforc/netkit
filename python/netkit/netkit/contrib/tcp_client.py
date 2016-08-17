@@ -30,6 +30,7 @@ class TcpClient(object):
             self.address = address
 
         self.timeout = timeout
+        self.stream = Stream()
 
     def connect(self):
         """
@@ -51,7 +52,7 @@ class TcpClient(object):
             sock.close()
             raise e
 
-        self.stream = Stream(sock)
+        self.stream.sock = sock
 
     def read(self):
         """
@@ -86,15 +87,9 @@ class TcpClient(object):
         return self.stream.write(data)
 
     def close(self):
-        if not self.stream:
-            return
-
         return self.stream.close()
 
     def closed(self):
-        if not self.stream:
-            return True
-
         return self.stream.closed()
 
     def __str__(self):

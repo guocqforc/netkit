@@ -39,7 +39,7 @@ TcpClient::TcpClient(const std::string &host, int port, double timeout) {
     m_host = host;
     m_port = port;
     m_timeout = timeout;
-    m_stream = NULL;
+    m_stream = new Stream();
 }
 
 TcpClient::~TcpClient() {
@@ -67,63 +67,34 @@ int TcpClient::connect() {
         setsockopt(sockFd, SOL_SOCKET, SO_RCVTIMEO, (char*)&tvTimeout, sizeof(tvTimeout));
     }
 
-    if (m_stream) {
-        m_stream->setSockFd(sockFd);
-    }
-    else {
-        m_stream = new Stream(sockFd);
-    }
+    m_stream->setSockFd(sockFd);
 
     return 0;
 }
 
 // 0 为成功
 int TcpClient::read(IBox* box) {
-    if (!m_stream) {
-        return -1;
-    }
-
     return m_stream->read(box);
 }
 
 // 0 为成功
 int TcpClient::write(IBox* box) {
-    if (!m_stream) {
-        return -1;
-    }
-
     return m_stream->write(box);
 }
 
 int TcpClient::write(const char* buf, int bufLen) {
-    if (!m_stream) {
-        return -1;
-    }
-
     return m_stream->write(buf, bufLen);
 }
 
 void TcpClient::shutdown(int how) {
-    if (!m_stream) {
-        return;
-    }
-
     return m_stream->shutdown(how);
 }
 
 void TcpClient::close() {
-    if (!m_stream) {
-        return;
-    }
-
     return m_stream->close();
 }
 
 bool TcpClient::isClosed() {
-    if (!m_stream) {
-        return true;
-    }
-
     return m_stream->isClosed();
 }
 

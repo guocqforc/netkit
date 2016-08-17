@@ -29,6 +29,10 @@ void Stream::_init(SocketType sockFd, int readBufferInitSize, int readBufferMaxS
     m_readBufferMaxSize = readBufferMaxSize;
 }
 
+Stream::Stream() {
+    _init(-1, READ_BUFFER_INIT_SIZE, READ_BUFFER_MAX_SIZE);
+}
+
 Stream::Stream(SocketType sockFd) {
     _init(sockFd, READ_BUFFER_INIT_SIZE, READ_BUFFER_MAX_SIZE);
 }
@@ -42,6 +46,10 @@ Stream::Stream(SocketType sockFd, int readBufferInitSize, int readBufferMaxSize)
 }
 
 Stream::~Stream() {}
+
+SocketType Stream::getSockFd() {
+    return m_sockFd;
+}
 
 void Stream::setSockFd(SocketType sockFd) {
     m_sockFd = sockFd;
