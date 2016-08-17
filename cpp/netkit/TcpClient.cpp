@@ -58,7 +58,7 @@ int TcpClient::connect() {
         return connectResult;
     }
 
-    if (m_timeout > 0) {
+    if (m_timeout >= 0) {
         struct timeval tvTimeout = {
                 (int)m_timeout,
                 (int)((m_timeout - (int)m_timeout) * 1000000)
@@ -322,10 +322,11 @@ int TcpClient::_selectConnect(std::string host, int port, double timeout, netkit
 
             {
                 // 进行中，准备用select判断超时
-                struct timeval tvTimeout = {
-                    (int)timeout,
-                    (int)((timeout - (int)timeout) * 1000000)
-                };
+                struct timeval tvTimeout;
+                if (timeout >= 0) {
+                    tvTimeout.tv_sec = (int)timeout;
+                    tvTimeout.tv_usec = (int)((timeout - (int)timeout) * 1000000);
+                }
 
                 // 可写，和报错状态都检测
                 fd_set writeFDs, errorFDs;
@@ -335,9 +336,10 @@ int TcpClient::_selectConnect(std::string host, int port, double timeout, netkit
                 FD_ZERO(&errorFDs);
                 FD_SET(sockFd, &errorFDs);
 
+                // select 的 timeout == NULL 代表永久阻塞
                 // windows 下，第一个参数无用，select没有fd数量和fd大小的限制
                 // linux下，fd的个数和最大值都不能超过1024
-                int ret = select(sockFd + 1, NULL, &writeFDs, &errorFDs, &tvTimeout);
+                int ret = select(sockFd + 1, NULL, &writeFDs, &errorFDs, timeout >=0 ? &tvTimeout : NULL);
                 if(ret > 0){
                     if (FD_ISSET(sockFd, &errorFDs)) {
                         // 报错了
@@ -421,6 +423,7 @@ int TcpClient::_pollConnect(std::string host, int port, double timeout, netkit::
                 // 要可写
                 pollSock.events = POLLOUT | POLLERR | POLLHUP;
 
+                // timeout < 0 代表永久阻塞
                 int ret = ::poll(fdList, 1, (int)(timeout * 1000));
                 if(ret > 0){
                     // 说明找到了
