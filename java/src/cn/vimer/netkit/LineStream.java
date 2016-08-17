@@ -16,11 +16,11 @@ public class LineStream {
         this.setSocket(Socket);
     }
 
-    public getSocket() {
+    public Socket getSocket() {
         return this.socket;
     }
 
-    public setSocket(Socket socket) throws IOException {
+    public void setSocket(Socket socket) throws IOException {
         this.socket = socket;
 
         if (this.socket != null) {
