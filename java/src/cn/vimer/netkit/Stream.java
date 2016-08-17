@@ -108,8 +108,13 @@ public class Stream {
 
     public void close() throws IOException {
         if (this.socket != null) {
-            this.socket.close();
-            this.socket = null;
+            try {
+                this.socket.close();
+            }
+            final {
+                // 无论是否抛异常，socket都必须设置为null
+                this.socket = null;
+            }
         }
     }
 
