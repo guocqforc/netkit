@@ -111,7 +111,7 @@ public class Stream {
             try {
                 this.socket.close();
             }
-            final {
+            finally {
                 // 无论是否抛异常，socket都必须设置为null
                 this.socket = null;
             }
