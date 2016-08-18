@@ -3,9 +3,13 @@
 // Copyright (c) 2014 dantezhu. All rights reserved.
 //
 
+#include <stdio.h>
 #include <string.h>
-#include <fcntl.h>
+#include <errno.h>
+#include <iostream>
 #include <sstream>
+#include <signal.h>
+#include <fcntl.h>
 
 #if defined(_WIN32) || (defined(CC_TARGET_PLATFORM) && CC_TARGET_PLATFORM==CC_PLATFORM_WIN32)
 
