@@ -427,8 +427,8 @@ int TcpClient::_pollConnect(std::string host, int port, double timeout, netkit::
                 // 要可写
                 pollSock.events = POLLOUT | POLLERR | POLLHUP;
 
-                // timeout < 0 代表永久阻塞
-                int ret = ::poll(fdList, 1, (int)(timeout * 1000));
+                // poll的timeout单位为毫秒。-1代表无限等待(其他负值不行)
+                int ret = ::poll(fdList, 1, (int)(timeout >= 0 ? timeout * 1000 : -1));
                 if(ret > 0){
                     // 说明找到了
                     if ((pollSock.revents & POLLERR) || (pollSock.revents & POLLHUP)) {
