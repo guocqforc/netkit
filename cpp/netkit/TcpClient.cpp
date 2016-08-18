@@ -140,7 +140,7 @@ int TcpClient::_createUnitySocket(std::string host, int port, netkit::SocketType
                         aip->ai_protocol);
 
         if (sockFd < 0) {
-            switch errno {
+            switch (errno) {
             case EAFNOSUPPORT:
             case EPROTONOSUPPORT:
                 // e.g., skip the errors until
