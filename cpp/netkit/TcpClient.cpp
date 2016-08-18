@@ -141,22 +141,22 @@ int TcpClient::_createUnitySocket(std::string host, int port, netkit::SocketType
 
         if (sockFd < 0) {
             switch (errno) {
-            case EAFNOSUPPORT:
-            case EPROTONOSUPPORT:
-                // e.g., skip the errors until
-                // the last address family,
-                // see section 4.4.
-                if (aip->ai_next) {
-                    continue;
-                }
-                else {
-                    // handle unknown protocol errors
-                    break;
-                }
+                case EAFNOSUPPORT:
+                case EPROTONOSUPPORT:
+                    // e.g., skip the errors until
+                    // the last address family,
+                    // see section 4.4.
+                    if (aip->ai_next) {
+                        continue;
+                    }
+                    else {
+                        // handle unknown protocol errors
+                        break;
+                    }
 
-            default:
-                // handle other socket errors
-                ;
+                default:
+                    // handle other socket errors
+                    ;
             }
 
         }
