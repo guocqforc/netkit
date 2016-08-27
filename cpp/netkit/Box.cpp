@@ -153,8 +153,8 @@ void Box::setBody(const std::string& str) {
 }
 
 int Box::headerLen() {
-    return sizeof(this->magic) + sizeof(this->version) + sizeof(this->flag) + sizeof(this->_transfer_packet_len)
-        + sizeof(this->cmd) + sizeof(this->ret) + sizeof(this->sn);
+    return sizeof(this->magic) + sizeof(this->version) + sizeof(this->flag) + sizeof(this->_transfer_packet_len) + \
+        sizeof(this->cmd) + sizeof(this->ret) + sizeof(this->sn);
 }
 
 int Box::bodyLen() {
