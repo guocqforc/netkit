@@ -95,7 +95,7 @@ int Box::_unpack(const char* buf, int length, bool save) {
     short flag_ = ntohs(*((short*)buf));
     buf += sizeof(short);
 
-    int packetLen_ = ntohl(*((int*)buf));
+    int packet_len_ = ntohl(*((int*)buf));
     buf += sizeof(int);
 
     int cmd_ = ntohl(*((int*)buf));
@@ -107,28 +107,28 @@ int Box::_unpack(const char* buf, int length, bool save) {
     int sn_ = ntohl(*((int*)buf));
     buf += sizeof(int);
 
-    if (packetLen_ > length) {
+    if (packet_len_ > length) {
         // 还没收完，继续
         return 0;
     }
 
     if (!save) {
-        return packetLen_;
+        return packet_len_;
     }
 
     this->magic = magic_;
     this->version = version_;
     this->flag = flag_;
-    this->_placeholder_packet_len = packetLen_;
+    this->_placeholder_packet_len = packet_len_;
     this->cmd = cmd_;
     this->ret = ret_;
     this->sn = sn_;
 
-    this->setBody(buf, packetLen_ - this->headerLen());
+    this->setBody(buf, packet_len_ - this->headerLen());
 
     this->_unpack_done = true;
 
-    return packetLen_;
+    return packet_len_;
 }
 
 const char* Box::getBody() {
