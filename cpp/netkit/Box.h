@@ -20,8 +20,8 @@ public:
     int magic;
     short version;
     short flag;
-    // 这个只用来在网络上传输，放在这里是怕忘记了
-    int _transfer_packet_len;
+    // 这个只用来在网络上传输，放在这里仅作为占位符
+    int _placeholder_packet_len;
     int cmd;
     int ret;
     int sn;

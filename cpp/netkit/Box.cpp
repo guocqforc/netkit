@@ -22,7 +22,7 @@ Box::Box() {
     this->magic = MAGIC;
     this->version = 0;
     this->flag = 0;
-    this->_transfer_packet_len = 0;
+    this->_placeholder_packet_len = 0;
     this->cmd = 0;
     this->ret = 0;
     this->sn = 0;
@@ -95,7 +95,7 @@ int Box::_unpack(const char* buf, int length, bool save) {
     short flag_ = ntohs(*((short*)buf));
     buf += sizeof(short);
 
-    int pktLen_ = ntohl(*((int*)buf));
+    int packetLen_ = ntohl(*((int*)buf));
     buf += sizeof(int);
 
     int cmd_ = ntohl(*((int*)buf));
@@ -107,28 +107,28 @@ int Box::_unpack(const char* buf, int length, bool save) {
     int sn_ = ntohl(*((int*)buf));
     buf += sizeof(int);
 
-    if (pktLen_ > length) {
+    if (packetLen_ > length) {
         // 还没收完，继续
         return 0;
     }
 
     if (!save) {
-        return pktLen_;
+        return packetLen_;
     }
 
     this->magic = magic_;
     this->version = version_;
     this->flag = flag_;
-    this->_transfer_packet_len = pktLen_;
+    this->_placeholder_packet_len = packetLen_;
     this->cmd = cmd_;
     this->ret = ret_;
     this->sn = sn_;
 
-    this->setBody(buf, pktLen_ - this->headerLen());
+    this->setBody(buf, packetLen_ - this->headerLen());
 
     this->_unpack_done = true;
 
-    return pktLen_;
+    return packetLen_;
 }
 
 const char* Box::getBody() {
@@ -153,7 +153,7 @@ void Box::setBody(const std::string& str) {
 }
 
 int Box::headerLen() {
-    return sizeof(this->magic) + sizeof(this->version) + sizeof(this->flag) + sizeof(this->_transfer_packet_len) + \
+    return sizeof(this->magic) + sizeof(this->version) + sizeof(this->flag) + sizeof(this->_placeholder_packet_len) + \
         sizeof(this->cmd) + sizeof(this->ret) + sizeof(this->sn);
 }
 

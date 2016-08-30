@@ -23,8 +23,8 @@ public class Box implements IBox {
     public int magic = MAGIC;
     public short version;
     public short flag;
-    // 这个只用来在网络上传输，放在这里是怕忘记了
-    private int _transfer_packet_len;
+    // 这个只用来在网络上传输，放在这里仅作占位符
+    private int _placeholder_packet_len;
     public int cmd;
     public int ret;
     public int sn;
@@ -147,7 +147,7 @@ public class Box implements IBox {
         this.magic = _magic;
         this.version = _version;
         this.flag = _flag;
-        this._transfer_packet_len = _packet_len;
+        this._placeholder_packet_len = _packet_len;
         this.cmd = _cmd;
         this.ret = _ret;
         this.sn = _sn;
