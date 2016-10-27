@@ -139,13 +139,13 @@ const std::string& Box::getStringBody() {
     return this->_body;
 }
 
-void Box::setBody(const char* p_body, int body_len) {
-    if (!p_body) {
+void Box::setBody(const char* buf, int length) {
+    if (!buf) {
         this->_body.resize(0);
         return;
     }
 
-    this->_body.assign(p_body, body_len);
+    this->_body.assign(buf, length);
 }
 
 void Box::setBody(const std::string& str) {
