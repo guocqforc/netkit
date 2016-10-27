@@ -41,25 +41,25 @@ const std::string& LineBox::getStringBody() {
     return this->_body;
 }
 
-void LineBox::setBody(const char* p_body, int body_len) {
-    if (!p_body) {
+void LineBox::setBody(const char* buf, int length) {
+    if (!buf) {
         this->_body.resize(0);
         return;
     }
 
-    if (p_body[body_len-1] == this->LINE_END) {
+    if (buf[length-1] == this->LINE_END) {
         // 不用多申请了
-        this->_body.resize(body_len);
+        this->_body.resize(length);
         // 强制写入数据
-        memcpy((void*)this->_body.c_str(), p_body, body_len);
+        memcpy((void*)this->_body.c_str(), buf, length);
     }
     else {
         // 不用多申请了
-        this->_body.resize(body_len + 1);
+        this->_body.resize(length + 1);
         // 强制写入数据
-        memcpy((void*)this->_body.c_str(), p_body, body_len);
+        memcpy((void*)this->_body.c_str(), buf, length);
 
-        ((char*)this->_body.c_str())[body_len] = this->LINE_END;
+        ((char*)this->_body.c_str())[length] = this->LINE_END;
     }
 }
 
