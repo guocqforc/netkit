@@ -171,6 +171,7 @@ bool Box::unpackDone() {
 
 std::string Box::toString() {
     std::stringstream ss;
+    ss << "<";
     ss << "magic: " << this->magic;
     ss << ", version: " << this->version;
     ss << ", flag: " << this->flag;
@@ -178,6 +179,7 @@ std::string Box::toString() {
     ss << ", ret: " << this->ret;
     ss << ", sn: " << this->sn;
     ss << ", bodyLen: " << this->bodyLen();
+    ss << ">";
 
     return ss.str();
 }

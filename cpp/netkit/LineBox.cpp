@@ -107,7 +107,9 @@ int LineBox::_unpack(const char* buf, int length, bool save) {
 
 std::string LineBox::toString() {
     std::stringstream ss;
+    ss << "<";
     ss << "bodyLen: " << this->bodyLen();
+    ss << ">";
 
     return ss.str();
 }

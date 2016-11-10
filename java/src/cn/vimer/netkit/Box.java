@@ -206,6 +206,7 @@ public class Box implements IBox {
 
     public String toString() {
         String out = "";
+        out += "<";
         out += "magic: " + magic;
         out += ", version: " + version;
         out += ", flag: " + flag;
@@ -214,6 +215,7 @@ public class Box implements IBox {
         out += ", ret: " + ret;
         out += ", sn: " + sn;
         out += ", bodyLen: " + bodyLen();
+        out += ">";
 
         return out;
     }
