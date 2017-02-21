@@ -35,10 +35,16 @@ public:
 
     bool isClosed();
 
+    void setTcpNoDelay(bool tcpNoDelay);
+    bool getTcpNoDelay();
+
 private:
 
     // 设置阻塞/非阻塞socket
     void _setBlockSocket(netkit::SocketType sockFd, bool block);
+
+    // 设置 TCP_NODELAY
+    int _setTcpNoDelay(netkit::SocketType sockFd);
 
     // 通过FQDN创建socket。同时支持IPv4/IPv6
     int _createUnitySocket(std::string host, int port, netkit::SocketType &resultSock, std::string &address);
@@ -72,6 +78,8 @@ private:
     std::string m_host;
     int m_port;
     double m_timeout;
+
+    bool m_tcpNoDelay;
 
     Stream *m_stream;
 };

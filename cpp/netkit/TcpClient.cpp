@@ -26,6 +26,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <netinet/tcp.h>
 // for addrinfo
 #include <netdb.h>
 #include <poll.h>
@@ -40,6 +41,7 @@
 namespace netkit {
 
 TcpClient::TcpClient(const std::string &host, int port, double timeout) {
+    m_tcpNoDelay = false;
     m_host = host;
     m_port = port;
     m_timeout = timeout;
@@ -69,6 +71,10 @@ int TcpClient::connect() {
         };
 
         setsockopt(sockFd, SOL_SOCKET, SO_RCVTIMEO, (char*)&tvTimeout, sizeof(tvTimeout));
+    }
+
+    if (m_tcpNoDelay) {
+        _setTcpNoDelay(sockFd);
     }
 
     m_stream->setSockFd(sockFd);
@@ -102,6 +108,14 @@ bool TcpClient::isClosed() {
     return m_stream->isClosed();
 }
 
+void TcpClient::setTcpNoDelay(bool tcpNoDelay) {
+    m_tcpNoDelay = tcpNoDelay;
+}
+
+bool TcpClient::getTcpNoDelay() {
+    return m_tcpNoDelay;
+}
+
 void TcpClient::_setBlockSocket(netkit::SocketType sockFd, bool block) {
 #if defined(_WIN32) || (defined(CC_TARGET_PLATFORM) && CC_TARGET_PLATFORM==CC_PLATFORM_WIN32)
     u_long mode = block ? 0 : 1;
@@ -119,6 +133,12 @@ void TcpClient::_setBlockSocket(netkit::SocketType sockFd, bool block) {
         fcntl(sockFd, F_SETFL, flags | O_NONBLOCK);
     }
 #endif
+}
+
+int TcpClient::_setTcpNoDelay(netkit::SocketType sockFd) {
+    const int on = 1;
+
+    return setsockopt(sockFd, IPPROTO_TCP, TCP_NODELAY, (SOCKET_OPT_VAL_PTR_TYPE *)&on, sizeof(on));
 }
 
 int TcpClient::_createUnitySocket(std::string host, int port, netkit::SocketType &resultSock, std::string &address) {
