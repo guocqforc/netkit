@@ -14,6 +14,9 @@ class TcpClient(object):
     timeout = None
     stream = None
 
+    # TCP_NODELAY，要在connect之前设置才有效
+    tcp_nodelay = False
+
     def __init__(self, box_class, host=None, port=None, timeout=None, address=None):
         """
         :param box_class:
@@ -46,6 +49,10 @@ class TcpClient(object):
 
         sock = socket.socket(socket_type, socket.SOCK_STREAM)
         sock.settimeout(self.timeout)
+
+        if self.tcp_nodelay:
+            sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+
         try:
             sock.connect(self.address)
         except Exception, e:
